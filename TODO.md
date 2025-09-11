@@ -11,3 +11,4 @@
   - ~~AI integration~~
 - periodic clean - table `report`
 - client-side language switch
+- remove references to NTPR
