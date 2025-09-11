@@ -30,7 +30,7 @@ public class AiDetectionService {
         this.messages = messages;
     }
 
-    public DetectionResult check(String content) {
+    public Map<String, Object> check(String content) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Content-Type", "application/json");
@@ -47,10 +47,10 @@ public class AiDetectionService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return result;
+        return interpret(result);
     }
 
-    public Map<String, Object> interpret(DetectionResult detectionResult) {
+    private Map<String, Object> interpret(DetectionResult detectionResult) {
         final int SCALE = 12;
         final RoundingMode RM = RoundingMode.HALF_UP;
         final BigDecimal ONE = BigDecimal.ONE.setScale(SCALE, RM);

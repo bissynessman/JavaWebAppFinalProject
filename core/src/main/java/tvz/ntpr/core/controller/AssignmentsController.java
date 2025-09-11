@@ -111,10 +111,15 @@ public class AssignmentsController {
         authenticationService.refresh();
         initModel(model, assignmentId);
         Assignment assignment = (Assignment) model.getAttribute("assignment");
-        DetectionResult result = aiDetectionService.check(assignment.getContent());
-        Map<String, Object> interpretation = aiDetectionService.interpret(result);
-        model.addAttribute("detectionResult", interpretation.get("classification"));
-        model.addAttribute("detectionLevel", interpretation.get("classificationLevel"));
+        String content = assignment.getContent();
+        if (!content.isEmpty() && !content.isBlank()) {
+            Map<String, Object> result = aiDetectionService.check(content);
+            model.addAttribute("detectionResult", result.get("classification"));
+            model.addAttribute("detectionLevel", result.get("classificationLevel"));
+        } else {
+            model.addAttribute("detectionResult", messages.getMessage("detection.result-uncertain"));
+            model.addAttribute("detectionLevel", "yellow");
+        }
         return "assignment";
     }
 
