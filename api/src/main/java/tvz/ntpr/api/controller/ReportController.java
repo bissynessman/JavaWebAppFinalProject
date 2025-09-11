@@ -35,9 +35,9 @@ public class ReportController {
         byte[] data = report.getData();
         byte[] signature = report.getSignature();
 
-        response.setHeader(HttpHeaders.CONTENT_TYPE, "application/zip");
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment");
-        response.setHeader("filename", filename);
+        response.setContentType("application/zip");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;"
+                + "filename=\"" + filename.replace(".pdf", ".zip\""));
 
         try (ZipOutputStream os = new ZipOutputStream(response.getOutputStream())) {
             ZipEntry dataEntry = new ZipEntry(filename);
