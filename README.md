@@ -44,7 +44,7 @@ Each module has its own `pom.xml` and can be run independently.
 ## Features
 
 - REST API exposing endpoints for application data.
-  - Produces and uses JWTs for authenticated access to the database.
+  - Generates and uses JWTs for authenticated access to the database.
 - Core services that:
   - Host web pages as user interfaces.
     - Login/Signup
