@@ -12,7 +12,7 @@ public class DigitalSignature {
     private static final String KEYSTORE_PATH = "other/keystore.p12";
     private static final String KEYSTORE_TYPE = "PKCS12";
     private static final String KEY_PASSWORD = "keypass";
-    private static final String KEY_ALIAS = "ntprkey";
+    private static final String KEY_ALIAS = "jwafpkey";
     private static final String HASH_ALGORITHM = "SHA256withRSA";
 
     private static final String VERIFIER_PATH = "other/verifier.exe";
