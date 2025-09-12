@@ -23,7 +23,7 @@ A Spring Boot multi-module project consisting of three related applications in o
 ## Project Structure
 
 ```
-JavaWebAppNTPR/
+JavaWebAppFinalProject/
 ├── api/
 │ ├── src/
 │ └── pom.xml
@@ -126,17 +126,17 @@ Typical configuration points:
 
 ## Notes
 
-### Client-side `ntpr://` protocol handler
+### Client-side `jwafp://` protocol handler
 
-- **Handler & install path:** `ntpr_handler.exe` is installed, by default, to `C:\Program Files (x86)\NTPR\ntpr_handler.exe` alongside `cert.pem`.  
+- **Handler & install path:** `jwafp_handler.exe` is installed, by default, to `C:\Program Files (x86)\JWAFP\jwafp_handler.exe` alongside `cert.pem`.  
 - **Protocol format:**  
-  `ntpr://download?url=<URL>` — `<URL>` must be percent-encoded.
+  `jwafp://download?url=<URL>` — `<URL>` must be percent-encoded.
 - **Registry / launch:** Installer must register the protocol so the command is exactly:  
   `"<path>\protocol_handler.exe" "%1"`  
   Wrong quoting or registering under the wrong hive will break launches.
 - **Native DLL** The EXE uses a native DLL requiring minimum version of Windows: Windows 8 (WINVER, _WIN32_WINNT = 0x0602).
 - **Quick local test:**
-  `"C:\Program Files (x86)\NTPR\ntpr_handler.exe" "ntpr://download?url=..."`
+  `"C:\Program Files (x86)\JWAFP\jwafp_handler.exe" "jwafp://download?url=..."`
 
 ---
 

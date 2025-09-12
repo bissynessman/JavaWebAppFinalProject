@@ -1,14 +1,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="tvz.ntpr.api.repo.CourseRepository">
-    <resultMap id="base" type="tvz.ntpr.api.entity.Course">
+<mapper namespace="tvz.jwafp.api.repo.CourseRepository">
+    <resultMap id="base" type="tvz.jwafp.api.entity.Course">
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="ects" jdbcType="INTEGER" property="ects"/>
         <result column="professor" jdbcType="VARCHAR" property="professor"/>
     </resultMap>
 
-    <insert id="create" parameterType="tvz.ntpr.api.entity.Course" keyProperty="id">
+    <insert id="create" parameterType="tvz.jwafp.api.entity.Course" keyProperty="id">
         INSERT
           INTO `course` (
                    `id`,
@@ -24,7 +24,7 @@
                )
     </insert>
 
-    <update id="update" parameterType="tvz.ntpr.api.entity.Course" keyProperty="id">
+    <update id="update" parameterType="tvz.jwafp.api.entity.Course" keyProperty="id">
         UPDATE `course`
            SET `name`      = #{name,jdbcType=VARCHAR},
                `ects`      = #{ects,jdbcType=INTEGER},

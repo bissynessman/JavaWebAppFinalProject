@@ -27,17 +27,17 @@
                             <td><label for="lastName" th:text="#{last-name} + ': '"></label></td>
                             <td><input type="text" id="lastName" th:field="*{lastName}" required></td>
                         </tr>
-                        <tr th:if="${userToRegister.role == T(tvz.ntpr.core.enums.Role).STUDENT}">
+                        <tr th:if="${userToRegister.role == T(tvz.jwafp.core.enums.Role).STUDENT}">
                             <td><label for="jmbag" th:text="#{jmbag} + ': '"></label></td>
                             <td><input type="text" id="jmbag" th:field="*{jmbag}" required></td>
                         </tr>
-                        <tr th:if="${userToRegister.role == T(tvz.ntpr.core.enums.Role).STUDENT}">
+                        <tr th:if="${userToRegister.role == T(tvz.jwafp.core.enums.Role).STUDENT}">
                             <td><label for="major" th:text="#{major} + ': '"></label></td>
                             <td>
                                 <select id="major"  th:field="*{major}" required>
                                     <option selected style="display: none;" value=""
                                             th:text="#{select-major}"></option>
-                                    <option th:each="major : ${T(tvz.ntpr.core.enums.Major).values()}"
+                                    <option th:each="major : ${T(tvz.jwafp.core.enums.Major).values()}"
                                             th:value="${major}" th:text="#{${major.messagesKey}}"></option>
                                 </select>
                             </td>
