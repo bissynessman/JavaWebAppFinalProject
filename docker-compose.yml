@@ -10,6 +10,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf
       - /home/tim/docker-volumes/jwafp-mysql-data:/var/lib/mysql
 
   api:
