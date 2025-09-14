@@ -4,6 +4,10 @@
 #include <shlobj.h>
 #include <commctrl.h>
 #include <curl/curl.h>
+#include <openssl/x509.h>
+#include <openssl/pem.h>
+#include <openssl/err.h>
+
 #include <string>
 #include <fstream>
 #include <thread>
@@ -11,9 +15,6 @@
 #include <sstream>
 #include <iomanip>
 #include <vector>
-#include <openssl/x509.h>
-#include <openssl/pem.h>
-#include <openssl/err.h>
 
 HWND hProgressBar;
 HWND hWnd;
