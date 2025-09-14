@@ -122,7 +122,7 @@ public class AssignmentsController {
         initModel(model, assignmentId);
         Assignment assignment = (Assignment) model.getAttribute("assignment");
         String content = assignment.getContent();
-        if (!content.isEmpty() && !content.isBlank()) {
+        if (!content.isBlank()) {
             Map<String, Object> result = aiDetectionService.check(content);
             model.addAttribute("detectionResult", result.get("classification"));
             model.addAttribute("detectionLevel", result.get("classificationLevel"));
