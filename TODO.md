@@ -9,7 +9,8 @@
 - ~~save user e-mail to database; use for cronjob~~
 - ~~assignment turn in~~
   - ~~AI integration~~
-- periodic clean - table `report`
+- ~~periodic clean - table `report`~~
 - client-side language switch
 - ~~remove references to NTPR~~
 - ~~unauthorized professor cant grade assignments~~
+- linux client binaries
