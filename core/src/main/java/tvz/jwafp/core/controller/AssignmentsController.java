@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import tvz.jwafp.core.entity.Assignment;
 import tvz.jwafp.core.entity.Course;
+import tvz.jwafp.core.entity.Professor;
 import tvz.jwafp.core.entity.User;
 import tvz.jwafp.core.enums.Role;
 import tvz.jwafp.core.helper.Messages;
@@ -12,6 +13,7 @@ import tvz.jwafp.core.rest.AiDetectionService;
 import tvz.jwafp.core.security.AuthenticationService;
 import tvz.jwafp.core.service.AssignmentService;
 import tvz.jwafp.core.service.CourseService;
+import tvz.jwafp.core.service.ProfessorService;
 
 import java.util.List;
 import java.util.Map;
@@ -25,17 +27,20 @@ import static tvz.jwafp.core.utils.ModelInitialization.initialize;
 public class AssignmentsController {
     private final AssignmentService assignmentService;
     private final CourseService courseService;
+    private final ProfessorService professorService;
     private final AuthenticationService authenticationService;
     private final AiDetectionService aiDetectionService;
     private final Messages messages;
 
     public AssignmentsController(AssignmentService assignmentService,
                                  CourseService courseService,
+                                 ProfessorService professorService,
                                  AuthenticationService authenticationService,
                                  AiDetectionService aiDetectionService,
                                  Messages messages) {
         this.assignmentService = assignmentService;
         this.courseService = courseService;
+        this.professorService = professorService;
         this.authenticationService = authenticationService;
         this.aiDetectionService = aiDetectionService;
         this.messages = messages;
@@ -84,7 +89,6 @@ public class AssignmentsController {
                              @PathVariable String assignmentId,
                              Model model) {
         authenticationService.refresh();
-        User userLogin = (User) model.getAttribute("userLogin");
         model.addAttribute("professor", professor);
         initModel(model, assignmentId);
         return "assignment";
@@ -95,10 +99,17 @@ public class AssignmentsController {
                                    @RequestParam(required = false, defaultValue = "false") Boolean professor,
                                    Model model,
                                    Assignment assignment) {
+        User userLogin = (User) model.getAttribute("userLogin");
         authenticationService.refresh();
         assignment.setId(assignmentId);
-        assignmentService.updateAssignment(assignment);
-        model.addAttribute("success", messages.getMessage("assignment.update-success"));
+
+        Professor professorObj = professorService.getProfessorById(userLogin.getUserUuid());
+        if (professorObj == null || professorObj.isAuthorized()) {
+            assignmentService.updateAssignment(assignment);
+            model.addAttribute("success", messages.getMessage("assignment.update-success"));
+        } else
+            model.addAttribute("error", messages.getMessage("error.bad-authorization"));
+
         model.addAttribute("professor", professor);
         initModel(model, assignmentId);
         return "assignment";
