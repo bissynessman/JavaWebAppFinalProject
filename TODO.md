@@ -10,7 +10,7 @@
 - ~~assignment turn in~~
   - ~~AI integration~~
 - ~~periodic clean - table `report`~~
-- client-side language switch
+- ~~client-side language switch~~
 - ~~remove references to NTPR~~
 - ~~unauthorized professor cant grade assignments~~
 - linux client binaries
