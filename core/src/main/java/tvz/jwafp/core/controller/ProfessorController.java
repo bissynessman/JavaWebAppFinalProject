@@ -16,6 +16,10 @@ import static tvz.jwafp.core.config.Urls.*;
 @RequestMapping(URL_PROFESSOR)
 @SessionAttributes({ "userLogin", "action" })
 public class ProfessorController {
+    private static final String ACTION_ADD_GRADE = "addGrade";
+    private static final String ACTION_VIEW_STUDENTS = "viewStudents";
+    private static final String ACTION_VIEW_ASSIGNMENTS = "viewAssignments";
+
     private final ProfessorService professorService;
     private final AuthenticationService authenticationService;
 
@@ -37,9 +41,9 @@ public class ProfessorController {
         User userLogin = (User) model.getAttribute("userLogin");
         redirectAttributes.addFlashAttribute("userLogin", userLogin);
         return switch (action) {
-            case "addGrade" -> "redirect:" + URL_GRADES;
-            case "viewStudents" -> "redirect:" + URL_VIEW_STUDENTS;
-            case "viewAssignments" -> "redirect:" + URL_ASSIGNMENT;
+            case ACTION_ADD_GRADE -> "redirect:" + URL_GRADES;
+            case ACTION_VIEW_STUDENTS -> "redirect:" + URL_VIEW_STUDENTS;
+            case ACTION_VIEW_ASSIGNMENTS -> "redirect:" + URL_ASSIGNMENT;
             default -> {
                 initModel(model);
                 yield "professor";
