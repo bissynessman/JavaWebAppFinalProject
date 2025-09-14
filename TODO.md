@@ -12,3 +12,4 @@
 - periodic clean - table `report`
 - client-side language switch
 - ~~remove references to NTPR~~
+- unauthorized professor cant grade assignments
