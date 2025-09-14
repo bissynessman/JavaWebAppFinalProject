@@ -3,7 +3,7 @@
     "tasks": [
 		{
 			"type": "cppbuild",
-			"label": "NTRP Library Build",
+			"label": "JWAFP Library Build",
 			"command": "C:/msys64/ucrt64/bin/g++.exe",
 			"args": [
 				"-fdiagnostics-color=always",
@@ -12,9 +12,9 @@
 				"-L",
 				"C:\\Program Files (x86)\\vcpkg\\installed\\x64-windows\\lib",
 				"-g",
-				"${workspaceFolder}\\source\\ntpr_library.cpp",
+				"${workspaceFolder}\\source\\jwafp_library.cpp",
 				"-o",
-				"${workspaceFolder}\\bin\\ntpr_handler embedded dlls\\ntpr_library.dll",
+				"${workspaceFolder}\\bin\\jwafp_handler embedded dlls\\jwafp_library.dll",
 				"-lcurl",
 				"-lole32",
 				"-lcomctl32",
@@ -38,19 +38,19 @@
 				"kind": "build",
 				"isDefault": false
 			},
-			"detail": "Build NTPR Library as a DLL"
+			"detail": "Build JWAFP Library as a DLL"
 		},
 		{
 			"type": "shell",
-			"label": "NTPR Handler Build",
+			"label": "JWAFP Handler Build",
 			"command": "pyinstaller.exe",
 			"args": [
 				"--onefile",
 				"--noconsole",
 				"--add-binary",
-				"${workspaceFolder}\\bin\\ntpr_handler embedded dlls\\ntpr_library.dll;.",
+				"${workspaceFolder}\\bin\\jwafp_handler embedded dlls\\jwafp_library.dll;.",
 				"--add-binary",
-				"${workspaceFolder}\\bin\\ntpr_handler embedded dlls\\libcurl.dll;.",
+				"${workspaceFolder}\\bin\\jwafp_handler embedded dlls\\libcurl.dll;.",
 				"--specpath",
 				"${workspaceFolder}\\build artifacts\\PyInstaller",
 				"--workpath",
@@ -58,7 +58,7 @@
 				"--clean",
 				"--distpath",
 				"bin",
-				"${workspaceFolder}\\source\\ntpr_handler.py"
+				"${workspaceFolder}\\source\\jwafp_handler.py"
 			],
 			"options": {
 				"cwd": "${workspaceFolder}"
@@ -68,15 +68,15 @@
 				"kind": "build",
 				"isDefault": false
 			},
-			"detail": "Build NTPR Handler as an EXE with embedded DLLs"
+			"detail": "Build JWAFP Handler as an EXE with embedded DLLs"
 		},
 		{
 			"type": "shell",
-			"label": "NTPR Installer Build",
+			"label": "JWAFP Installer Build",
 			"command": "ISCC.exe",
 			"args": [
 				"/O\"${workspaceFolder}\\bin\"",
-				"\"${workspaceFolder}\\source\\ntpr_installer.iss\""
+				"\"${workspaceFolder}\\source\\jwafp_installer.iss\""
 			],
 			"options": {
 				"cwd": "${workspaceFolder}"
@@ -92,9 +92,9 @@
 			"label": "Build",
 			"dependsOrder": "sequence",
 			"dependsOn": [
-				"NTRP Library Build",
-				"NTPR Handler Build",
-				"NTPR Installer Build"
+				"JWAFP Library Build",
+				"JWAFP Handler Build",
+				"JWAFP Installer Build"
 			],
 			"problemMatcher": []
 		}

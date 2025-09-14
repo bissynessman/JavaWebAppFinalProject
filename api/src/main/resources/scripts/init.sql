@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS ntprdb;
+DROP DATABASE IF EXISTS jwafpdb;
 
 DROP USER IF EXISTS `admin`@`%`;
 
-CREATE DATABASE IF NOT EXISTS ntprdb
+CREATE DATABASE IF NOT EXISTS jwafpdb
   CHARACTER SET utf8mb4
 	    COLLATE utf8mb4_unicode_ci;
 
@@ -26,7 +26,7 @@ GRANT SELECT,
 	  ALTER ROUTINE,
 	  EVENT,
 	  TRIGGER
-   ON `ntprdb`.*
+   ON `jwafpdb`.*
    TO `admin`@`%`;
 
 FLUSH PRIVILEGES;

@@ -1,0 +1,139 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tvz.jwafp.api.repo.AssignmentRepository">
+    <resultMap id="base" type="tvz.jwafp.api.entity.Assignment">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="parent_assignment" jdbcType="VARCHAR" property="assignment"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="task" jdbcType="VARCHAR" property="task"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="grade" jdbcType="INTEGER" property="grade"/>
+        <result column="course" jdbcType="VARCHAR" property="course"/>
+        <result column="student" jdbcType="VARCHAR" property="student"/>
+    </resultMap>
+
+    <resultMap id="studentMask" type="tvz.jwafp.api.entity.Assignment">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="parent_assignment" jdbcType="VARCHAR" property="assignment"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="task" jdbcType="VARCHAR" property="task"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="grade" jdbcType="INTEGER" property="grade"/>
+        <result column="course" jdbcType="VARCHAR" property="course"/>
+        <result column="student" jdbcType="VARCHAR" property="student"/>
+        <result column="student_name" jdbcType="VARCHAR" property="studentName"/>
+    </resultMap>
+
+    <insert id="create" parameterType="tvz.jwafp.api.entity.Assignment" keyProperty="id">
+        INSERT
+          INTO `assignment` (
+                    `id`,
+                    `parent_assignment`,
+                    `title`,
+                    `task`,
+                    `content`,
+                    `grade`,
+                    `course`,
+                    `student`
+               )
+        VALUES (
+                   #{id,jdbcType=VARCHAR},
+                   #{assignment,jdbcType=VARCHAR},
+                   #{title,jdbcType=VARCHAR},
+                   #{task,jdbcType=VARCHAR},
+                   #{content,jdbcType=VARCHAR},
+                   #{grade,jdbcType=INTEGER},
+                   #{course,jdbcType=VARCHAR},
+                   #{student,jdbcType=VARCHAR}
+               )
+    </insert>
+
+    <update id="update" parameterType="tvz.jwafp.api.entity.Assignment" keyProperty="id">
+        UPDATE `assignment`
+           SET `parent_assignment` = #{assignment,jdbcType=VARCHAR},
+               `title`      = #{title,jdbcType=VARCHAR},
+               `task`       = #{task,jdbcType=VARCHAR},
+               `content`    = #{content,jdbcType=VARCHAR},
+               `grade`      = #{grade,jdbcType=INTEGER},
+               `course`     = #{course,jdbcType=VARCHAR},
+               `student`    = #{student,jdbcType=VARCHAR}
+        <where>
+               `id` = #{id,jdbcType=VARCHAR}
+        </where>
+    </update>
+
+    <delete id="deleteById" parameterType="String">
+        DELETE
+          FROM `assignment`
+        <where>
+               `id` = #{id,jdbcType=VARCHAR}
+        </where>
+    </delete>
+
+    <select id="findById" parameterType="String" resultMap="base">
+        <include refid="selectGeneral"/>
+        <where>
+               `assignment`.`id` = #{id,jdbcType=VARCHAR}
+        </where>
+    </select>
+
+    <select id="findAll" resultMap="base">
+        SELECT *
+          FROM `assignment`
+    </select>
+
+    <select id="findActiveForStudent" parameterType="String" resultMap="base">
+        <include refid="selectForStudent"/>
+        <where>
+               `assignment`.`student`  = #{studentId,jdbcType=VARCHAR}
+           AND `assignment`.`grade`   IS NULL
+        </where>
+    </select>
+    
+    <select id="findAllForCourse" parameterType="String" resultMap="studentMask">
+        <include refid="selectChild"/>
+               ,
+               CONCAT(`student`.`first_name`, ' ', `student`.`last_name`) AS student_name
+          FROM `assignment`
+          JOIN `assignment` AS parent
+            ON `assignment`.`parent_assignment` = parent.`id`
+          JOIN `student`
+            ON `assignment`.`student`           = `student`.`id`
+        <where>
+               `parent`.`course` = #{courseId,jdbcType=VARCHAR}
+        </where>
+    </select>
+
+    <select id="findAllForAssignment" parameterType="String" resultMap="base">
+        SELECT *
+          FROM `assignment`
+        <where>
+               `parent_assignment` = #{assignmentId,jdbcType=VARCHAR}
+        </where>
+    </select>
+
+    <sql id="selectForStudent">
+        <include refid="selectChild"/>
+        FROM `assignment`
+        JOIN `assignment` AS parent
+          ON `assignment`.`parent_assignment` = parent.`id`
+    </sql>
+
+    <sql id="selectGeneral">
+        <include refid="selectChild"/>
+             FROM `assignment`
+        LEFT JOIN `assignment` AS parent
+               ON `assignment`.`parent_assignment` = parent.`id`
+    </sql>
+
+    <sql id="selectChild">
+        SELECT `assignment`.`id`,
+               `assignment`.`parent_assignment`,
+               parent.`title`,
+               parent.`task`,
+               `assignment`.`content`,
+               `assignment`.`grade`,
+               parent.`course`,
+               `assignment`.`student`
+    </sql>
+</mapper>

@@ -24,6 +24,10 @@
                         <td><input type="text" id="username" th:field="*{username}" required></td>
                     </tr>
                     <tr>
+                        <td><label for="email" th:text="#{email} + ': '"></label></td>
+                        <td><input type="text" id="email" th:field="*{email}" required></td>
+                    </tr>
+                    <tr>
                         <td><label for="password" th:text="#{password} + ': '"></label></td>
                         <td><input type="password" id="password" th:field="*{password}" required></td>
                     </tr>

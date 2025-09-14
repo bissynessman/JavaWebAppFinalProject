@@ -5,6 +5,7 @@
       <option name="customHeaders">
         <set>
           <option value="X-Api-Key" />
+          <option value="filename" />
         </set>
       </option>
     </inspection_tool>

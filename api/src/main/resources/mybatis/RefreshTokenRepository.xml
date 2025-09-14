@@ -1,14 +1,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="tvz.ntpr.api.repo.RefreshTokenRepository">
-    <resultMap id="base" type="tvz.ntpr.api.auth.JwToken">
+<mapper namespace="tvz.jwafp.api.repo.RefreshTokenRepository">
+    <resultMap id="base" type="tvz.jwafp.api.auth.JwToken">
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="token" jdbcType="VARCHAR" property="token"/>
         <result column="username" jdbcType="VARCHAR" property="username"/>
         <result column="valid_until" jdbcType="DATE" property="validUntil"/>
     </resultMap>
 
-    <insert id="create" parameterType="tvz.ntpr.api.auth.JwToken" keyProperty="id">
+    <insert id="create" parameterType="tvz.jwafp.api.auth.JwToken" keyProperty="id">
         INSERT
           INTO `tokens` (
                    `id`,
@@ -24,7 +24,7 @@
                )
     </insert>
 
-    <update id="update" parameterType="tvz.ntpr.api.auth.JwToken" keyProperty="id">
+    <update id="update" parameterType="tvz.jwafp.api.auth.JwToken" keyProperty="id">
         UPDATE `tokens`
            SET `token`       = #{token,jdbcType=VARCHAR},
                `username`    = #{username,jdbcType=VARCHAR},

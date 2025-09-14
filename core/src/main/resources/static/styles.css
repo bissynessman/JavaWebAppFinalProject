@@ -44,6 +44,16 @@ button {
     padding-bottom: 3px;
 }
 
+.btnR {
+    background-color: white;
+    color: black;
+    border: 2px solid #BA102F;
+    border-radius: 10pt;
+    font-size: 14px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
 .btn-big {
     font-size: 20px;
     padding-top: 10px;
@@ -52,6 +62,11 @@ button {
 
 .btnB:hover {
     background-color: #008CBA;
+    color: white;
+}
+
+.btnR:hover {
+    background-color: #BA102F;
     color: white;
 }
 
@@ -105,6 +120,7 @@ button {
     color: var(--button_outline_color);
     transform: translateY(-0.2em);
     transition: transform 0.1s ease;
+    font-size: 10pt;
 }
 
 button:hover .button_top {
@@ -141,8 +157,117 @@ button:active .button_top {
 }
 
 img {
-   width: 20px;
+   width: 25px;
 }
+
+.sidebar {
+    width: 250px;
+    background-color: #f8f9fa;
+    padding: 1rem;
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+
+    position: fixed;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+
+    height: auto;
+    max-height: 80vh;
+    overflow-y: auto;
+
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+.sidebar h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: #343a40;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 0.5rem;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    margin: 0.5rem 0;
+}
+
+.sidebar a {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    color: #495057;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.sidebar a:hover {
+    background-color: #e9ecef;
+    color: #212529;
+}
+
+.sidebar a.active {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.assignment {
+    height: 20vh;
+    width: 100%;
+}
+
+.muted {
+    color: #343A40;
+}
+
+h2 {
+    font-size: 20pt;
+    margin-bottom: 2px;
+}
+
+h3 {
+    font-size: 12pt;
+    margin-bottom: 20px;
+}
+
+.horizontal {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.result-card {
+    display: inline-block;
+    width: fit-content;
+    text-align: center;
+    font-size: large;
+    margin-top: 5px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    padding: 8px 12px;
+}
+
+.result-card:hover {
+    box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+}
+
+.fit-content {
+    width: fit-content;
+}
+
+.detect-cell {
+    width: 15%;
+    text-align: center;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
 
 .email {
     width: 100%;
@@ -161,5 +286,15 @@ img {
 
 .download-btn a,
 .email-btn a {
+    text-decoration: none;
+}
+
+#home-container {
+    position: absolute;
+    top: 100px;
+    left: 20px;
+}
+
+#home-container a {
     text-decoration: none;
 }

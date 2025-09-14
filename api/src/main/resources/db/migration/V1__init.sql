@@ -51,12 +51,15 @@ CREATE TABLE `user` (
       ALTER TABLE `course`
         ADD CONSTRAINT `courseProfessorConstraint`
 FOREIGN KEY (`professor`)
- REFERENCES `professor`(`id`);
+ REFERENCES `professor`(`id`)
+  ON DELETE CASCADE;
+
       ALTER TABLE `grade`
         ADD CONSTRAINT `gradeCourseConstraint`
 FOREIGN KEY (`course`)
- REFERENCES `course`(`id`);
-      ALTER TABLE `grade`
+ REFERENCES `course`(`id`)
+  ON DELETE CASCADE,
         ADD CONSTRAINT `gradeStudentConstraint`
 FOREIGN KEY (`student`)
- REFERENCES `student`(`id`);
+ REFERENCES `student`(`id`)
+  ON DELETE CASCADE;

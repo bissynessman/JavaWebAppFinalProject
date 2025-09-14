@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Assignments</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <script th:src="@{/refreshTime.js}" defer></script>
+</head>
+
+<body>
+<div th:replace="~{fragments::dateTime}"></div>
+<div th:replace="~{fragments::languageSwitch}"></div>
+<div class="container mt-5">
+    <div th:replace="~{fragments::success}"></div>
+    <div th:replace="~{fragments::error}"></div>
+
+    <h1 th:text="#{assignment.new}"></h1>
+    <hr/>
+    <h2 class="mb-4 muted" th:text="${course.name}"></h2>
+    <form method="POST" th:action="@{/assignment/course/{courseId}(courseId=${course.id})}" th:object="${newAssignment}">
+        <input hidden="hidden" th:field="*{id}">
+        <input hidden="hidden" name="course" th:value="${course.id}">
+        <table class="table table-striped">
+            <tbody>
+            <tr>
+                <td><label for="title" th:text="#{assignment.name} + ': '"></label></td>
+                <td><input type="text" id="title" th:field="*{title}" required></td>
+            </tr>
+            <tr>
+                <td><label for="task" th:text="#{assignment.task} + ': '"></label></td>
+                <td><input id="task" type="text" th:field="*{task}"/></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><button type="submit" class="btn btnB" th:text="#{assignment.add}"></button></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+
+    <h1 class="mb-4" th:text="#{assignment.title}"></h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th style="text-align: center;">#</th>
+                <th th:text="#{assignment.name}"></th>
+                <th>UUID</th>
+                <th th:text="#{assignment.task}"></th>
+                <th th:text="#{assignment.grade}"></th>
+                <th th:text="#{assignment.student}"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="assignment, iterStat : ${assignments}">
+                <td style="text-align: center;" th:text="${iterStat.index + 1}"></td>
+                <td th:text="${assignment.title}"></td>
+                <td><span th:text="${assignment.id}"></span></td>
+                <td><span th:text="${assignment.task}"></span></td>
+                <td><span th:text="${assignment.grade != null ? assignment.grade + '%' : ''}"></span></td>
+                <td><span th:text="${assignment.studentName}"></span></td>
+                <td><a th:href="@{/assignment/{id}(id=${assignment.id}, professor=${professor})}" class="btn btnB" th:text="#{assignment.grade-it}"></a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

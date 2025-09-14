@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Assignment</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" th:href="@{/styles.css}">
+        <script th:src="@{/refreshTime.js}" defer></script>
+    </head>
+
+    <body>
+        <div th:replace="~{fragments::dateTime}"></div>
+        <div th:replace="~{fragments::languageSwitch}"></div>
+        <div class="container mt-5">
+            <h1 th:text="#{assignment.title}"></h1>
+            <hr/>
+            <div th:replace="~{fragments::success}"></div>
+            <div th:replace="~{fragments::error}"></div>
+
+            <h2 th:text="${assignment.title}"></h2>
+            <h3 class="muted" th:text="${courseName}"></h3>
+            <hr/>
+            <span th:text="${assignment.task}"></span>
+            <form th:if="${professor}" method="POST" th:action="@{/assignment/{id}(id=${assignment.id}, professor=${professor}, courseId=${assignment.course})}" th:object="${assignment}">
+                <input hidden="hidden" th:field="*{assignment}"/>
+                <input hidden="hidden" th:field="*{student}"/>
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <td colspan="2"><textarea id="content" class="assignment" th:field="*{content}" readonly></textarea></td>
+                        </tr>
+                        <tr>
+                            <td><label for="grade" th:text="#{assignment.grade} + ': '"></label></td>
+                            <td class="horizontal">
+                                <input type="number" min="0" max="100" id="grade" th:field="*{grade}" required/>
+                                <span style="margin-left: 5px;"> %</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="detect-cell">
+                                <a th:href="@{/assignment/detect/{id}(id=${assignment.id})}" class="btn btnB" th:text="#{assignment.detect}"></a>
+                                <div th:if="${detectionResult != null}" class="card result-card">
+                                    <div class="card-body fit-content">
+                                        <div th:style="'color: ' + ${detectionLevel} + ';'">
+                                            <span th:text="${detectionResult}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="horizontal" width="100%">
+                                <a th:href="@{/assignment/course/{id}(id=${assignment.course})}" class="btn btnR" th:text="#{assignment.cancel}"></a>
+                                <button type="submit" class="btn btnB" th:text="#{assignment.submit}"></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+            <form th:unless="${professor}" method="POST" th:action="@{/assignment/{id}(id=${assignment.id})}" th:object="${assignment}">
+                <input hidden="hidden" th:field="*{assignment}"/>
+                <input hidden="hidden" th:field="*{student}"/>
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <td><textarea id="content" class="assignment" th:field="*{content}" required></textarea></td>
+                        </tr>
+                        <tr>
+                            <td class="horizontal">
+                                <a th:href="@{/student}" class="btn btnR" th:text="#{assignment.cancel}"></a>
+                                <button type="submit" class="btn btnB" th:text="#{assignment.submit}"></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>

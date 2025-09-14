@@ -19,9 +19,7 @@
                     <div class="error-message">
                         <p th:text="${error}"></p>
                     </div>
-                    <div th:if="${error == 'Username already exists'}">
-                        <a th:href="@{/login}" th:text="#{login-instead}"></a>
-                    </div>
+                    <a th:href="@{/login}" th:text="#{login-instead}"></a>
                 </div>
             </div>
 
@@ -46,9 +44,9 @@
                             <select id="role"  th:field="*{role}" required>
                                 <option selected style="display: none;" value=""
                                         th:text="#{select-role}"></option>
-                                <option th:value="${T(tvz.ntpr.core.enums.Role).PROFESSOR}"
+                                <option th:value="${T(tvz.jwafp.core.enums.Role).PROFESSOR}"
                                         th:text="#{professor}"></option>
-                                <option th:value="${T(tvz.ntpr.core.enums.Role).STUDENT}"
+                                <option th:value="${T(tvz.jwafp.core.enums.Role).STUDENT}"
                                         th:text="#{student}"></option>
                             </select>
                         </td>

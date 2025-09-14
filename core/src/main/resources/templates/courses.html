@@ -21,11 +21,11 @@
                     <tbody>
                         <tr>
                             <td><label for="name" th:text="#{courses.name}"></label></td>
-                            <td><input type="text" id="name" th:field="*{course.name}" required></td>
+                            <td><input type="text" id="name" th:field="*{course.name}" required/></td>
                         </tr>
                         <tr>
                             <td><label for="ects">ECTS:</label></td>
-                            <td><input type="number" min="1" max="7" id="ects" th:field="*{course.ects}" required></td>
+                            <td><input type="number" min="1" max="7" id="ects" th:field="*{course.ects}" required/></td>
                         </tr>
                         <tr>
                             <td><label for="professor" th:text="#{courses.professor} + ': '"></label></td>

@@ -11,6 +11,7 @@
     <body>
         <div th:replace="~{fragments::dateTime}"></div>
         <div th:replace="~{fragments::languageSwitch}"></div>
+        <div th:replace="~{fragments::assignmentSidebar(${assignments})}"></div>
         <div class="email-btn">
             <button id="emailButton">
                 <a th:href="@{/mail}">
@@ -40,7 +41,7 @@
                 <div class="card-body">
                     <p><strong th:text="#{jmbag} + ': '"></strong><span th:text="${student.jmbag}"></span></p>
                     <p><strong th:text="#{name} + ': '"></strong><span th:text="${student.name}"></span></p>
-                    <p><strong th:text="#{major} + ': '"></strong><span th:text="${student.major.name}"></span></p>
+                    <p><strong th:text="#{major} + ': '"></strong><span th:text="#{${student.major.messagesKey}}"></span></p>
                 </div>
             </div>
 

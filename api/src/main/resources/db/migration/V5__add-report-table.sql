@@ -13,4 +13,5 @@ CREATE TABLE `report` (
       ALTER TABLE `report`
         ADD CONSTRAINT `reportStudentConstraint`
 FOREIGN KEY (`student_id`)
- REFERENCES `student`(`id`);
+ REFERENCES `student`(`id`)
+  ON DELETE CASCADE;

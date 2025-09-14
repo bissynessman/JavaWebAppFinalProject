@@ -13,16 +13,17 @@ A Spring Boot multi-module project consisting of three related applications in o
 1. [Project Structure](#project-structure)
 2. [Features](#features)
 3. [Technologies](#technologies)
-4. [Prerequisites](#prerequisites)
-5. [Configuration](#configuration)
-6. [Notes](#notes)
+4. [Public APIs](#public-apis)
+5. [Prerequisites](#prerequisites)
+6. [Configuration](#configuration)
+7. [Notes](#notes)
 
 ---
 
 ## Project Structure
 
 ```
-JavaWebAppNTPR/
+JavaWebAppFinalProject/
 ├── api/
 │ ├── src/
 │ └── pom.xml
@@ -48,39 +49,51 @@ Each module has its own `pom.xml` and can be run independently.
   - Host web pages as user interfaces.
     - Login/Signup
     - Student overview
+      - Assignment turn-in
+      - Download generated grade reports in PDF format along with their detached digital signature as a .zip archive
     - Professor overview
+      - Assignment creation and grading
+        - AI writing detection
     - Administrative actions
       - Professor authorization
       - User account manipulation
       - New course input
-    - New Grade input
+    - Student grading
   - Use Cron scheduler for periodic job execution.
   - Generate PDFs with detached digital signatures using a PKCS#12 keystore.
-    - Download generated PDFs along with their detached signature as a .zip archive
   - Send e-mails with attachments to users
 - Client-side app
   - If ran by an implemented custom protocol prompts user to input a bandwidth limit and downloads files from a URL supplied by the protocol.
-  - If ran by user prompts them to select a PDF file and it's detached signature to verify validity.
+  - If ran by the user prompts them to select a PDF file and it's detached signature to verify validity.
 
 ---
 
 ## Technologies
 
-- Spring Boot
-- Thymeleaf
 - Maven
-- iText
-- jUnit
-- jsoup
-- JSON Web Token
-- Lombok
+- Spring Boot
 - MySQL
 - H2
 - MyBatis
+- JSON Web Token
+- Thymeleaf
 - Flyway
+- iText
+- jsoup
+- jUnit
+- Lombok
 - Tkinter
 - curl
 - OpenSSL
+
+---
+
+## Public APIs
+
+- API Ninjas - World Time
+  - [https://api.api-ninjas.com/v1/worldtime](https://api.api-ninjas.com/v1/worldtime)
+- Sapling AI - AI Detect
+  - [https://api.sapling.ai/api/v1/aidetect](https://api.sapling.ai/api/v1/aidetect)
 
 ---
 
@@ -107,23 +120,23 @@ Typical configuration points:
     `server.port=8080`
 
 - A PKCS#12 keystore under `core/src/main/resources/other`.
-- A corresponding `cert.pem` file under `client/bin`.
+  - A corresponding `cert.pem` file under `client/bin` and `core/src/main/resources/other`.
 
 ---
 
 ## Notes
 
-### Client-side `ntpr://` protocol handler
+### Client-side `jwafp://` protocol handler
 
-- **Handler & install path:** `ntpr_handler.exe` is installed, by default, to `C:\Program Files (x86)\NTPR\ntpr_handler.exe` alongside `cert.pem`.  
+- **Handler & install path:** `jwafp_handler.exe` is installed, by default, to `C:\Program Files (x86)\JWAFP\jwafp_handler.exe` alongside `cert.pem`.  
 - **Protocol format:**  
-  `ntpr://download?url=<URL>` — `<URL>` must be percent-encoded.
+  `jwafp://download?url=<URL>` — `<URL>` must be percent-encoded.
 - **Registry / launch:** Installer must register the protocol so the command is exactly:  
   `"<path>\protocol_handler.exe" "%1"`  
   Wrong quoting or registering under the wrong hive will break launches.
 - **Native DLL** The EXE uses a native DLL requiring minimum version of Windows: Windows 8 (WINVER, _WIN32_WINNT = 0x0602).
 - **Quick local test:**
-  `"C:\Program Files (x86)\NTPR\ntpr_handler.exe" "ntpr://download?url=..."`
+  `"C:\Program Files (x86)\JWAFP\jwafp_handler.exe" "jwafp://download?url=..."`
 
 ---
 
