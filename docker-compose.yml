@@ -8,7 +8,7 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     ports:
-      - "3306:3307"
+      - "3309:3306"
     volumes:
       - ./my.cnf:/etc/mysql/conf.d/my.cnf
       - /home/tim/docker-volumes/jwafp-mysql-data:/var/lib/mysql
@@ -19,7 +19,7 @@ services:
     depends_on:
       - mysql
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/jwafpdb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=CET
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3308/jwafpdb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=CET
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: password
     ports:
