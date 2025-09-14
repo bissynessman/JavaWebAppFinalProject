@@ -1,8 +1,10 @@
 package tvz.jwafp.core.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tvz.jwafp.core.helper.Messages;
 import tvz.jwafp.core.comparator.CourseComparator;
@@ -31,27 +33,31 @@ public class CoursesController {
     private final ProfessorService professorService;
     private final AuthenticationService authenticationService;
     private final Messages messages;
+    private final LocaleResolver localeResolver;
 
     public CoursesController(CourseService courseService,
                              ProfessorService professorService,
                              AuthenticationService authenticationService,
-                             Messages messages) {
+                             Messages messages,
+                             LocaleResolver localeResolver) {
         this.courseService = courseService;
         this.professorService = professorService;
         this.authenticationService = authenticationService;
         this.messages = messages;
+        this.localeResolver = localeResolver;
     }
 
     @GetMapping
-    public String showCoursesView(Model model) {
+    public String showCoursesView(Model model, HttpServletRequest request) {
         authenticationService.refresh();
         User userLogin = (User) model.getAttribute("userLogin");
-        initModel(model);
+        initModel(model, localeResolver, request);
         return "courses";
     }
 
     @PostMapping(URL_DELETE)
-    public String processUpdates(Model model, RedirectAttributes redirectAttributes, @ModelAttribute DeleteBuffer courseBuffer) {
+    public String processUpdates(
+            Model model, RedirectAttributes redirectAttributes, @ModelAttribute DeleteBuffer courseBuffer) {
         authenticationService.refresh();
         User userLogin = (User) model.getAttribute("userLogin");
         List<String> coursesToDelete = courseBuffer.getItems().entrySet().stream()
@@ -69,7 +75,9 @@ public class CoursesController {
     }
 
     @PostMapping
-    public String processAddCourse(Model model, @ModelAttribute CourseWrapper newCourse) {
+    public String processAddCourse(Model model,
+                                   @ModelAttribute CourseWrapper newCourse,
+                                   HttpServletRequest request) {
         authenticationService.refresh();
         User userLogin = (User) model.getAttribute("userLogin");
 
@@ -77,12 +85,12 @@ public class CoursesController {
                 newCourse.getProfessorId()).getId());
         courseService.saveCourse(newCourse.getCourse());
 
-        initModel(model);
+        initModel(model, localeResolver, request);
         return "courses";
     }
 
-    private void initModel(Model model) {
-        initialize(model, URL_COURSES);
+    private void initModel(Model model, LocaleResolver localeResolver, HttpServletRequest request) {
+        initialize(model, URL_COURSES, localeResolver, request);
         List<Course> coursesList = courseService.getAll().stream()
                 .sorted(new CourseComparator())
                 .toList();

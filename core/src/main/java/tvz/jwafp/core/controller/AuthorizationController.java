@@ -1,11 +1,13 @@
 package tvz.jwafp.core.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.LocaleResolver;
 import tvz.jwafp.core.helper.Messages;
 import tvz.jwafp.core.comparator.ProfessorComparator;
 import tvz.jwafp.core.helper.ProfessorBuffer;
@@ -23,25 +25,30 @@ public class AuthorizationController {
     private final ProfessorService professorService;
     private final AuthenticationService authenticationService;
     private final Messages messages;
+    private final LocaleResolver localeResolver;
 
     public AuthorizationController(ProfessorService professorService,
                                    AuthenticationService authenticationService,
-                                   Messages messages) {
+                                   Messages messages,
+                                   LocaleResolver localeResolver) {
         this.professorService = professorService;
         this.authenticationService = authenticationService;
         this.messages = messages;
+        this.localeResolver = localeResolver;
     }
 
     @GetMapping
-    public String showAuthorizationView(Model model) {
+    public String showAuthorizationView(Model model, HttpServletRequest request) {
         authenticationService.refresh();
         User userLogin = (User) model.getAttribute("userLogin");
-        initModel(model);
+        initModel(model, localeResolver, request);
         return "authorization";
     }
 
     @PostMapping
-    public String processAuthorization(Model model, @ModelAttribute ProfessorBuffer professorBuffer) {
+    public String processAuthorization(Model model,
+                                       @ModelAttribute ProfessorBuffer professorBuffer,
+                                       HttpServletRequest request) {
         authenticationService.refresh();
         User userLogin = (User) model.getAttribute("userLogin");
 
@@ -52,12 +59,12 @@ public class AuthorizationController {
         } else
             model.addAttribute("error", messages.getMessage("error.missing-professor"));
 
-        initModel(model);
+        initModel(model, localeResolver, request);
         return "authorization";
     }
 
-    private void initModel(Model model) {
-        initialize(model, URL_AUTHORIZATION);
+    private void initModel(Model model, LocaleResolver localeResolver, HttpServletRequest request) {
+        initialize(model, URL_AUTHORIZATION, localeResolver, request);
         ProfessorBuffer professorBuffer = ProfessorBuffer.builder()
                 .professors(professorService.getUnauthorizedProfessors().stream()
                         .sorted(new ProfessorComparator())

@@ -1,11 +1,13 @@
 package tvz.jwafp.core.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.LocaleResolver;
 import tvz.jwafp.core.helper.Messages;
 import tvz.jwafp.core.comparator.CourseComparator;
 import tvz.jwafp.core.comparator.StudentComparator;
@@ -31,32 +33,36 @@ public class GradesController {
     private final ProfessorService professorService;
     private final AuthenticationService authenticationService;
     private final Messages messages;
+    private final LocaleResolver localeResolver;
 
     public GradesController(GradeService gradeService,
                             StudentService studentService,
                             CourseService courseService,
                             ProfessorService professorService,
                             AuthenticationService authenticationService,
-                            Messages messages) {
+                            Messages messages,
+                            LocaleResolver localeResolver) {
         this.gradeService = gradeService;
         this.studentService = studentService;
         this.courseService = courseService;
         this.professorService = professorService;
         this.authenticationService = authenticationService;
         this.messages = messages;
+        this.localeResolver = localeResolver;
     }
 
     @GetMapping
-    public String showGradesView(Model model) {
+    public String showGradesView(Model model, HttpServletRequest request) {
         authenticationService.refresh();
         User userLogin = (User) model.getAttribute("userLogin");
         Professor professor = professorService.getProfessorById(userLogin.getUserUuid());
-        initModel(model, userLogin, professor);
+        initModel(model, userLogin, professor, localeResolver, request);
         return "grades";
     }
 
     @PostMapping
-    private String processGradeInput(Model model, Grade grade) {
+    private String processGradeInput(
+            Model model, Grade grade, HttpServletRequest request) {
         authenticationService.refresh();
         User userLogin = (User) model.getAttribute("userLogin");
         Professor professor = professorService.getProfessorById(userLogin.getUserUuid());
@@ -72,12 +78,16 @@ public class GradesController {
         } else
             model.addAttribute("error", messages.getMessage("error.bad-authorization"));
 
-        initModel(model, userLogin, professor);
+        initModel(model, userLogin, professor, localeResolver, request);
         return "grades";
     }
 
-    private void initModel(Model model, User userLogin, Professor professor) {
-        initialize(model, URL_GRADES);
+    private void initModel(Model model,
+                           User userLogin,
+                           Professor professor,
+                           LocaleResolver localeResolver,
+                           HttpServletRequest request) {
+        initialize(model, URL_GRADES, localeResolver, request);
         List<Student> studentList = studentService.getAll().stream()
                 .sorted(new StudentComparator())
                 .toList();

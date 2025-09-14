@@ -1,8 +1,10 @@
 package tvz.jwafp.core.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tvz.jwafp.core.helper.Messages;
 import tvz.jwafp.core.enums.Role;
@@ -32,28 +34,32 @@ public class ProfileController {
     private final StudentService studentService;
     private final AuthenticationService authenticationService;
     private final Messages messages;
+    private final LocaleResolver localeResolver;
 
     public ProfileController(UserService userService,
                              ProfessorService professorService,
                              StudentService studentService,
                              AuthenticationService authenticationService,
-                             Messages messages) {
+                             Messages messages,
+                             LocaleResolver localeResolver) {
         this.userService = userService;
         this.professorService = professorService;
         this.studentService = studentService;
         this.authenticationService = authenticationService;
         this.messages = messages;
+        this.localeResolver = localeResolver;
     }
 
     @GetMapping
-    public String showProfileView(Model model) {
+    public String showProfileView(Model model, HttpServletRequest request) {
         authenticationService.refresh();
-        initModel(model);
+        initModel(model, localeResolver, request);
         return "profile";
     }
 
     @PostMapping
-    public String handleProfileSetup(Model model, RedirectAttributes redirectAttributes,
+    public String handleProfileSetup(Model model,
+                                     RedirectAttributes redirectAttributes,
                                      UserToRegister userToRegister,
                                      @ModelAttribute("profile") Object profile) {
         authenticationService.signup(userToRegister);
@@ -124,8 +130,8 @@ public class ProfileController {
         else return pattern.matcher(string).matches();
     }
 
-    private void initModel(Model model) {
-        initialize(model, URL_PROFILE);
+    private void initModel(Model model, LocaleResolver localeResolver, HttpServletRequest request) {
+        initialize(model, URL_PROFILE, localeResolver, request);
         UserToRegister userToRegister = (UserToRegister) model.getAttribute("userToRegister");
         if (userToRegister.getRole().equals(Role.PROFESSOR))
             model.addAttribute("profile", Professor.builder().build());

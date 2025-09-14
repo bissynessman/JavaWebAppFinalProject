@@ -1,8 +1,10 @@
 package tvz.jwafp.core.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tvz.jwafp.core.comparator.GradeComparator;
 import tvz.jwafp.core.config.AppProperties;
@@ -37,6 +39,7 @@ public class StudentController {
     private final AssignmentService assignmentService;
     private final DatabaseApi databaseApi;
     private final Messages messages;
+    private final LocaleResolver localeResolver;
     private final AppProperties appProperties;
 
     public StudentController(StudentService studentService,
@@ -47,6 +50,7 @@ public class StudentController {
                              AssignmentService assignmentService,
                              DatabaseApi databaseApi,
                              Messages messages,
+                             LocaleResolver localeResolver,
                              AppProperties appProperties) {
         this.studentService = studentService;
         this.gradeService = gradeService;
@@ -56,13 +60,14 @@ public class StudentController {
         this.assignmentService = assignmentService;
         this.databaseApi = databaseApi;
         this.messages = messages;
+        this.localeResolver = localeResolver;
         this.appProperties = appProperties;
     }
 
     @GetMapping
-    public String showStudentView(Model model) {
+    public String showStudentView(Model model, HttpServletRequest request) {
         authenticationService.refresh();
-        initModel(model);
+        initModel(model, localeResolver, request);
         return "student";
     }
 
@@ -102,8 +107,10 @@ public class StudentController {
     }
 
     @GetMapping(URL_STUDENT_ID)
-    public String showStudentView(Model model, @PathVariable("studentId") String studentId) {
-        initialize(model, URL_STUDENT + "/" + studentId);
+    public String showStudentView(Model model,
+                                  @PathVariable("studentId") String studentId,
+                                  HttpServletRequest request) {
+        initialize(model, URL_STUDENT + "/" + studentId, localeResolver, request);
         Student student = studentService.getStudentById(studentId);
         List<Grade> grades = gradeService.getGradesByStudent(student.getId());
         for (Grade grade : grades)
@@ -113,8 +120,8 @@ public class StudentController {
         return "student";
     }
 
-    private void initModel(Model model) {
-        initialize(model, URL_STUDENT);
+    private void initModel(Model model, LocaleResolver localeResolver, HttpServletRequest request) {
+        initialize(model, URL_STUDENT, localeResolver, request);
         User userLogin = (User) model.getAttribute("userLogin");
         Student student = studentService.getStudentById(userLogin.getUserUuid());
         List<Grade> grades = gradeService.getGradesByStudent(student.getId()).stream()

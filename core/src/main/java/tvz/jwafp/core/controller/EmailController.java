@@ -1,9 +1,11 @@
 package tvz.jwafp.core.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.LocaleResolver;
 import tvz.jwafp.core.entity.User;
 import tvz.jwafp.core.helper.Mail;
 import tvz.jwafp.core.helper.Messages;
@@ -25,20 +27,23 @@ public class EmailController {
     private final UserService userService;
     private final AuthenticationService authenticationService;
     private final Messages messages;
+    private final LocaleResolver localeResolver;
 
     public EmailController(EmailService emailService,
                            UserService userService,
                            AuthenticationService authenticationService,
-                           Messages messages) {
+                           Messages messages,
+                           LocaleResolver localeResolver) {
         this.emailService = emailService;
         this.userService = userService;
         this.authenticationService = authenticationService;
         this.messages = messages;
+        this.localeResolver = localeResolver;
     }
 
     @GetMapping
-    public String view(Model model) {
-        initModel(model);
+    public String view(Model model, HttpServletRequest request) {
+        initModel(model, localeResolver, request);
         return "mail";
     }
 
@@ -48,7 +53,8 @@ public class EmailController {
                             @RequestParam String subject,
                             @RequestParam String body,
                             @RequestParam MultipartFile[] attachments,
-                            Model model) {
+                            Model model,
+                            HttpServletRequest request) {
         Mail mail = new Mail(from, to, subject, body, AttachmentUtils.fromMultipartFiles(attachments));
         try {
             emailService.sendEmail(mail);
@@ -57,12 +63,12 @@ public class EmailController {
             e.printStackTrace();
             model.addAttribute("error", messages.getMessage("error.email"));
         }
-        initModel(model);
+        initModel(model, localeResolver, request);
         return "mail";
     }
 
-    private void initModel(Model model) {
-        initialize(model, URL_MAIL);
+    private void initModel(Model model, LocaleResolver localeResolver, HttpServletRequest request) {
+        initialize(model, URL_MAIL, localeResolver, request);
         authenticationService.refresh();
         User userLogin = (User) model.getAttribute("userLogin");
         List<User> usersList = userService.getAll().stream()

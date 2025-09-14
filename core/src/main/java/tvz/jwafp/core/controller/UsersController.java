@@ -1,8 +1,10 @@
 package tvz.jwafp.core.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tvz.jwafp.core.helper.Messages;
 import tvz.jwafp.core.comparator.UserComparator;
@@ -27,31 +29,38 @@ public class UsersController {
     private final UserService userService;
     private final AuthenticationService authenticationService;
     private final Messages messages;
+    private final LocaleResolver localeResolver;
 
-    public UsersController(UserService userService, AuthenticationService authenticationService, Messages messages) {
+    public UsersController(UserService userService,
+                           AuthenticationService authenticationService,
+                           Messages messages,
+                           LocaleResolver localeResolver) {
         this.userService = userService;
         this.authenticationService = authenticationService;
         this.messages = messages;
+        this.localeResolver = localeResolver;
     }
 
     @GetMapping
-    public String showUsersView(Model model) {
+    public String showUsersView(Model model, HttpServletRequest request) {
         authenticationService.refresh();
         User userLogin = (User) model.getAttribute("userLogin");
-        initModel(model);
+        initModel(model, localeResolver, request);
         return "users";
     }
 
     @GetMapping(URL_EDIT_USER)
-    public String editUser(Model model, @PathVariable String userId) {
+    public String editUser(Model model, @PathVariable String userId, HttpServletRequest request) {
         authenticationService.refresh();
-        initEditModel(model, userId);
+        initEditModel(model, userId, localeResolver, request);
         return "editUser";
     }
 
     @PostMapping(URL_DELETE)
-    public String deleteUser(Model model, RedirectAttributes redirectAttributes,
-                             @ModelAttribute DeleteBuffer userBuffer) {
+    public String deleteUser(Model model,
+                             RedirectAttributes redirectAttributes,
+                             @ModelAttribute DeleteBuffer userBuffer,
+                             HttpServletRequest request) {
         authenticationService.refresh();
         List<String> usersToDelete = userBuffer.getItems().entrySet().stream()
                 .filter(entry -> entry.getValue().getValue())
@@ -64,13 +73,15 @@ public class UsersController {
         } else
             redirectAttributes.addFlashAttribute("error", messages.getMessage("error.missing-user"));
 
-        initModel(model);
+        initModel(model, localeResolver, request);
         return "redirect:" + URL_USERS;
     }
 
     @PostMapping(URL_EDIT_USER)
-    public String processEditUser(Model model, RedirectAttributes redirectAttributes,
-                                  @PathVariable String userId, @ModelAttribute User userUpdate) {
+    public String processEditUser(Model model,
+                                  RedirectAttributes redirectAttributes,
+                                  @PathVariable String userId,
+                                  @ModelAttribute User userUpdate) {
         authenticationService.refresh();
         User user = userService.getById(userId);
 
@@ -88,8 +99,8 @@ public class UsersController {
         return "redirect:" + URL_USERS;
     }
 
-    private void initEditModel(Model model, String userId) {
-        initialize(model, URL_USERS + "/edit/" + userId);
+    private void initEditModel(Model model, String userId, LocaleResolver localeResolver, HttpServletRequest request) {
+        initialize(model, URL_USERS + "/edit/" + userId, localeResolver, request);
         User user = userService.getById(userId);
         if (user != null) {
             user.setPassword("");
@@ -97,8 +108,8 @@ public class UsersController {
         }
     }
 
-    private void initModel(Model model) {
-        initialize(model, URL_USERS);
+    private void initModel(Model model, LocaleResolver localeResolver, HttpServletRequest request) {
+        initialize(model, URL_USERS, localeResolver, request);
         List<User> usersList = userService.getAll().stream()
                 .filter(user -> user.getRole() != Role.ADMIN)
                 .sorted(new UserComparator())

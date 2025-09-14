@@ -1,8 +1,10 @@
 package tvz.jwafp.core.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tvz.jwafp.core.entity.Professor;
 import tvz.jwafp.core.entity.User;
@@ -22,22 +24,28 @@ public class ProfessorController {
 
     private final ProfessorService professorService;
     private final AuthenticationService authenticationService;
+    private final LocaleResolver localeResolver;
 
-    public ProfessorController(ProfessorService professorService, AuthenticationService authenticationService) {
+    public ProfessorController(ProfessorService professorService,
+                               AuthenticationService authenticationService,
+                               LocaleResolver localeResolver) {
         this.professorService = professorService;
         this.authenticationService = authenticationService;
+        this.localeResolver = localeResolver;
     }
 
     @GetMapping
-    public String showProfessorView(Model model) {
+    public String showProfessorView(Model model, HttpServletRequest request) {
         authenticationService.refresh();
-        initModel(model);
+        initModel(model, localeResolver, request);
         return "professor";
     }
 
     @PostMapping
-    public String handleRedirects(Model model, RedirectAttributes redirectAttributes,
-                                  @RequestParam("action") String action) {
+    public String handleRedirects(Model model,
+                                  RedirectAttributes redirectAttributes,
+                                  @RequestParam("action") String action,
+                                  HttpServletRequest request) {
         User userLogin = (User) model.getAttribute("userLogin");
         redirectAttributes.addFlashAttribute("userLogin", userLogin);
         return switch (action) {
@@ -45,14 +53,14 @@ public class ProfessorController {
             case ACTION_VIEW_STUDENTS -> "redirect:" + URL_VIEW_STUDENTS;
             case ACTION_VIEW_ASSIGNMENTS -> "redirect:" + URL_ASSIGNMENT;
             default -> {
-                initModel(model);
+                initModel(model, localeResolver, request);
                 yield "professor";
             }
         };
     }
 
-    private void initModel(Model model) {
-        initialize(model, URL_PROFESSOR);
+    private void initModel(Model model, LocaleResolver localeResolver, HttpServletRequest request) {
+        initialize(model, URL_PROFESSOR, localeResolver, request);
         User userLogin = (User) model.getAttribute("userLogin");
         Professor professor = professorService.getProfessorById(userLogin.getUserUuid());
         model.addAttribute("professor", professor);

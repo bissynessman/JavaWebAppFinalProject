@@ -1,8 +1,10 @@
 package tvz.jwafp.core.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.LocaleResolver;
 import tvz.jwafp.core.entity.Assignment;
 import tvz.jwafp.core.entity.Course;
 import tvz.jwafp.core.entity.Professor;
@@ -31,66 +33,75 @@ public class AssignmentsController {
     private final AuthenticationService authenticationService;
     private final AiDetectionService aiDetectionService;
     private final Messages messages;
+    private final LocaleResolver localeResolver;
 
     public AssignmentsController(AssignmentService assignmentService,
                                  CourseService courseService,
                                  ProfessorService professorService,
                                  AuthenticationService authenticationService,
                                  AiDetectionService aiDetectionService,
-                                 Messages messages) {
+                                 Messages messages,
+                                 LocaleResolver localeResolver) {
         this.assignmentService = assignmentService;
         this.courseService = courseService;
         this.professorService = professorService;
         this.authenticationService = authenticationService;
         this.aiDetectionService = aiDetectionService;
         this.messages = messages;
+        this.localeResolver = localeResolver;
     }
 
     @GetMapping
-    public String assignments(Model model) {
+    public String assignments(Model model, HttpServletRequest request) {
         authenticationService.refresh();
         User userLogin = (User) model.getAttribute("userLogin");
         if (!userLogin.getRole().equals(Role.PROFESSOR))
             return "redirect:" + URL_INDEX;
-        initModelProfessor(model, userLogin.getUserUuid());
+        initModelProfessor(model, userLogin.getUserUuid(), localeResolver, request);
         return "assignments";
     }
 
     @PostMapping
-    public String saveAssignment(Model model, Assignment newAssignment) {
+    public String saveAssignment(
+            Model model, Assignment newAssignment, HttpServletRequest request) {
         authenticationService.refresh();
         assignmentService.saveAssignment(newAssignment);
         model.addAttribute("success", messages.getMessage("assignment.save-success"));
         User userLogin = (User) model.getAttribute("userLogin");
         if (!userLogin.getRole().equals(Role.PROFESSOR))
             return "redirect:" + URL_INDEX;
-        initModelProfessor(model, userLogin.getUserUuid());
+        initModelProfessor(model, userLogin.getUserUuid(), localeResolver, request);
         return "assignments";
     }
 
     @GetMapping(URL_ASSIGNMENT_COURSE)
-    public String assignmentsByCourse(@PathVariable String courseId, Model model) {
+    public String assignmentsByCourse(
+            @PathVariable String courseId, Model model, HttpServletRequest request) {
         authenticationService.refresh();
-        initModelCourse(model, courseId);
+        initModelCourse(model, courseId, localeResolver, request);
         return "assignments-course";
     }
 
     @PostMapping(URL_ASSIGNMENT_COURSE)
-    public String saveAssignmentCourse(@PathVariable String courseId, Model model, Assignment newAssignment) {
+    public String saveAssignmentCourse(@PathVariable String courseId,
+                                       Model model,
+                                       Assignment newAssignment,
+                                       HttpServletRequest request) {
         authenticationService.refresh();
         assignmentService.saveAssignment(newAssignment);
         model.addAttribute("success", messages.getMessage("assignment.save-success"));
-        initModelCourse(model, courseId);
+        initModelCourse(model, courseId, localeResolver, request);
         return "assignments-course";
     }
 
     @GetMapping(URL_ASSIGNMENT_ID)
     public String assignment(@RequestParam(required = false, defaultValue = "false") Boolean professor,
                              @PathVariable String assignmentId,
-                             Model model) {
+                             Model model,
+                             HttpServletRequest request) {
         authenticationService.refresh();
         model.addAttribute("professor", professor);
-        initModel(model, assignmentId);
+        initModel(model, assignmentId, localeResolver, request);
         return "assignment";
     }
 
@@ -98,7 +109,8 @@ public class AssignmentsController {
     public String updateAssignment(@PathVariable String assignmentId,
                                    @RequestParam(required = false, defaultValue = "false") Boolean professor,
                                    Model model,
-                                   Assignment assignment) {
+                                   Assignment assignment,
+                                   HttpServletRequest request) {
         User userLogin = (User) model.getAttribute("userLogin");
         authenticationService.refresh();
         assignment.setId(assignmentId);
@@ -111,15 +123,16 @@ public class AssignmentsController {
             model.addAttribute("error", messages.getMessage("error.bad-authorization"));
 
         model.addAttribute("professor", professor);
-        initModel(model, assignmentId);
+        initModel(model, assignmentId, localeResolver, request);
         return "assignment";
     }
 
     @GetMapping(URL_ASSIGNMENT_DETECT)
-    public String detect(@PathVariable String assignmentId, Model model) {
+    public String detect(
+            @PathVariable String assignmentId, Model model, HttpServletRequest request) {
         model.addAttribute("professor", true);
         authenticationService.refresh();
-        initModel(model, assignmentId);
+        initModel(model, assignmentId, localeResolver, request);
         Assignment assignment = (Assignment) model.getAttribute("assignment");
         String content = assignment.getContent();
         if (!content.isBlank()) {
@@ -133,25 +146,28 @@ public class AssignmentsController {
         return "assignment";
     }
 
-    private void initModel(Model model, String assignmentId) {
-        initialize(model, URL_ASSIGNMENT + "/" + assignmentId);
+    private void initModel(
+            Model model, String assignmentId, LocaleResolver localeResolver, HttpServletRequest request) {
+        initialize(model, URL_ASSIGNMENT + "/" + assignmentId, localeResolver, request);
         Assignment assignment = assignmentService.getAssignmentById(assignmentId);
         String courseName = courseService.getCourseById(assignment.getCourse()).getName();
         model.addAttribute("assignment", assignment);
         model.addAttribute("courseName", courseName);
     }
 
-    private void initModelProfessor(Model model, String professorId) {
+    private void initModelProfessor(
+            Model model, String professorId, LocaleResolver localeResolver, HttpServletRequest request) {
         model.addAttribute("professor", true);
-        initialize(model, URL_ASSIGNMENT);
+        initialize(model, URL_ASSIGNMENT, localeResolver, request);
         List<Course> courses = courseService.getCoursesByProfessor(professorId);
         model.addAttribute("courses", courses);
         model.addAttribute("newAssignment", Assignment.builder().build());
     }
 
-    private void initModelCourse(Model model, String courseId) {
+    private void initModelCourse(
+            Model model, String courseId, LocaleResolver localeResolver, HttpServletRequest request) {
         model.addAttribute("professor", true);
-        initialize(model, URL_ASSIGNMENT + "/course/" + courseId);
+        initialize(model, URL_ASSIGNMENT + "/course/" + courseId, localeResolver, request);
         List<Assignment> assignments = assignmentService.getAllForCourse(courseId);
         Course course = courseService.getCourseById(courseId);
         model.addAttribute("assignments", assignments);

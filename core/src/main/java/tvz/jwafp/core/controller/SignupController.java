@@ -1,10 +1,12 @@
 package tvz.jwafp.core.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tvz.jwafp.core.helper.Messages;
 import tvz.jwafp.core.helper.UserToRegister;
@@ -20,16 +22,21 @@ public class SignupController {
     private final UserService userService;
     private final AuthenticationService authenticationService;
     private final Messages messages;
+    private final LocaleResolver localeResolver;
 
-    public SignupController(UserService userService, AuthenticationService authenticationService, Messages messages) {
+    public SignupController(UserService userService,
+                            AuthenticationService authenticationService,
+                            Messages messages,
+                            LocaleResolver localeResolver) {
         this.userService = userService;
         this.authenticationService = authenticationService;
         this.messages = messages;
+        this.localeResolver = localeResolver;
     }
 
     @GetMapping
-    public String showRegisterView(Model model) {
-        initModel(model);
+    public String showRegisterView(Model model, HttpServletRequest request) {
+        initModel(model, localeResolver, request);
         return "signup";
     }
 
@@ -48,8 +55,8 @@ public class SignupController {
         return "redirect:" + URL_PROFILE;
     }
 
-    private void initModel(Model model) {
-        initialize(model, URL_SIGNUP);
+    private void initModel(Model model, LocaleResolver localeResolver, HttpServletRequest request) {
+        initialize(model, URL_SIGNUP, localeResolver, request);
         model.addAttribute("userToRegister", new UserToRegister());
     }
 }
