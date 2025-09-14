@@ -46,9 +46,8 @@ public class AuthorizationController {
     }
 
     @PostMapping
-    public String processAuthorization(Model model,
-                                       @ModelAttribute ProfessorBuffer professorBuffer,
-                                       HttpServletRequest request) {
+    public String processAuthorization(
+            Model model, @ModelAttribute ProfessorBuffer professorBuffer, HttpServletRequest request) {
         authenticationService.refresh();
         User userLogin = (User) model.getAttribute("userLogin");
 

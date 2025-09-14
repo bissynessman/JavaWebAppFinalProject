@@ -107,9 +107,8 @@ public class StudentController {
     }
 
     @GetMapping(URL_STUDENT_ID)
-    public String showStudentView(Model model,
-                                  @PathVariable("studentId") String studentId,
-                                  HttpServletRequest request) {
+    public String showStudentView(
+            Model model, @PathVariable("studentId") String studentId, HttpServletRequest request) {
         initialize(model, URL_STUDENT + "/" + studentId, localeResolver, request);
         Student student = studentService.getStudentById(studentId);
         List<Grade> grades = gradeService.getGradesByStudent(student.getId());

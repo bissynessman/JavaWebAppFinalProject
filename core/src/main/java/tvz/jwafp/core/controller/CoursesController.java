@@ -75,9 +75,7 @@ public class CoursesController {
     }
 
     @PostMapping
-    public String processAddCourse(Model model,
-                                   @ModelAttribute CourseWrapper newCourse,
-                                   HttpServletRequest request) {
+    public String processAddCourse(Model model, @ModelAttribute CourseWrapper newCourse, HttpServletRequest request) {
         authenticationService.refresh();
         User userLogin = (User) model.getAttribute("userLogin");
 

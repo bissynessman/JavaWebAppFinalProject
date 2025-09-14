@@ -61,8 +61,7 @@ public class GradesController {
     }
 
     @PostMapping
-    private String processGradeInput(
-            Model model, Grade grade, HttpServletRequest request) {
+    private String processGradeInput(Model model, Grade grade, HttpServletRequest request) {
         authenticationService.refresh();
         User userLogin = (User) model.getAttribute("userLogin");
         Professor professor = professorService.getProfessorById(userLogin.getUserUuid());

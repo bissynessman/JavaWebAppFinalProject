@@ -62,8 +62,7 @@ public class AssignmentsController {
     }
 
     @PostMapping
-    public String saveAssignment(
-            Model model, Assignment newAssignment, HttpServletRequest request) {
+    public String saveAssignment(Model model, Assignment newAssignment, HttpServletRequest request) {
         authenticationService.refresh();
         assignmentService.saveAssignment(newAssignment);
         model.addAttribute("success", messages.getMessage("assignment.save-success"));
@@ -75,18 +74,15 @@ public class AssignmentsController {
     }
 
     @GetMapping(URL_ASSIGNMENT_COURSE)
-    public String assignmentsByCourse(
-            @PathVariable String courseId, Model model, HttpServletRequest request) {
+    public String assignmentsByCourse(@PathVariable String courseId, Model model, HttpServletRequest request) {
         authenticationService.refresh();
         initModelCourse(model, courseId, localeResolver, request);
         return "assignments-course";
     }
 
     @PostMapping(URL_ASSIGNMENT_COURSE)
-    public String saveAssignmentCourse(@PathVariable String courseId,
-                                       Model model,
-                                       Assignment newAssignment,
-                                       HttpServletRequest request) {
+    public String saveAssignmentCourse(
+            @PathVariable String courseId, Model model, Assignment newAssignment, HttpServletRequest request) {
         authenticationService.refresh();
         assignmentService.saveAssignment(newAssignment);
         model.addAttribute("success", messages.getMessage("assignment.save-success"));
@@ -128,8 +124,7 @@ public class AssignmentsController {
     }
 
     @GetMapping(URL_ASSIGNMENT_DETECT)
-    public String detect(
-            @PathVariable String assignmentId, Model model, HttpServletRequest request) {
+    public String detect(@PathVariable String assignmentId, Model model, HttpServletRequest request) {
         model.addAttribute("professor", true);
         authenticationService.refresh();
         initModel(model, assignmentId, localeResolver, request);

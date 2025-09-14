@@ -47,10 +47,8 @@ public class LoginController {
     }
 
     @PostMapping
-    public String processLogin(Model model,
-                               RedirectAttributes redirectAttributes,
-                               LoginRequest userLogin,
-                               HttpServletRequest request) {
+    public String processLogin(
+            Model model, RedirectAttributes redirectAttributes, LoginRequest userLogin, HttpServletRequest request) {
         try {
             authenticationService.login(userLogin.getUsername(), userLogin.getPassword());
         } catch (Exception e) {
