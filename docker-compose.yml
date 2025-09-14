@@ -1,17 +1,16 @@
-version: '3.8'
 services:
   mysql:
     image: mysql:latest
     container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: ntprdb
-      MYSQL_USER: admin
+      MYSQL_DATABASE: jwafpdb
+      MYSQL_USER: user
       MYSQL_PASSWORD: password
     ports:
       - "3306:3306"
     volumes:
-      - C:/docker/ntpr-mysql-data:/var/lib/mysql
+      - /home/tim/docker-volumes/jwafp-mysql-data:/var/lib/mysql
 
   api:
     build: ./api
@@ -19,8 +18,8 @@ services:
     depends_on:
       - mysql
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/ntprdb
-      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/jwafpdb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=CET
+      SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: password
     ports:
       - "8081:8081"

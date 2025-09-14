@@ -15,25 +15,26 @@ import java.util.List;
 @Primary
 @RequiredArgsConstructor
 public class AssignmentServiceImpl implements AssignmentService {
-    private static final String API_URL = DatabaseApi.ASSIGNMENTS_API;
-    
+    @Autowired
+    private final DatabaseApi databaseApi;
+
     @Autowired
     private final RestTemplate restTemplate;
 
     @Override
     public void saveAssignment(Assignment assignment) {
-        restTemplate.postForEntity(API_URL, assignment, void.class);
+        restTemplate.postForEntity(databaseApi.getAssignmentsApi(), assignment, void.class);
     }
 
     @Override
     public void updateAssignment(Assignment assignment) {
-        restTemplate.put(API_URL, assignment, void.class);
+        restTemplate.put(databaseApi.getAssignmentsApi(), assignment, void.class);
     }
 
     @Override
     public void deleteAssignments(List<String> ids) {
         for (String id : ids)
-            restTemplate.delete(API_URL + "/" + id);
+            restTemplate.delete(databaseApi.getAssignmentsApi() + "/" + id);
     }
 
     @Override
@@ -42,7 +43,7 @@ public class AssignmentServiceImpl implements AssignmentService {
         try {
             assignments = JsonParser.parseIntoList(
                     restTemplate.getForEntity(
-                            API_URL,
+                            databaseApi.getAssignmentsApi(),
                             String.class).getBody(),
                     Assignment.class);
         } catch (Exception e) {
@@ -57,7 +58,7 @@ public class AssignmentServiceImpl implements AssignmentService {
         try {
             assignment = JsonParser.parseIntoObject(
                     restTemplate.getForEntity(
-                            API_URL + "/" + assignmentId.toString(),
+                            databaseApi.getAssignmentsApi() + "/" + assignmentId.toString(),
                             String.class).getBody(),
                     Assignment.class);
         } catch (Exception e) {
@@ -72,7 +73,7 @@ public class AssignmentServiceImpl implements AssignmentService {
         try {
             assignments = JsonParser.parseIntoList(
                     restTemplate.getForEntity(
-                            API_URL + "/student/" + studentId,
+                            databaseApi.getAssignmentsApi() + "/student/" + studentId,
                             String.class).getBody(),
                     Assignment.class);
         } catch (Exception e) {
@@ -87,7 +88,7 @@ public class AssignmentServiceImpl implements AssignmentService {
         try {
             assignments = JsonParser.parseIntoList(
                     restTemplate.getForEntity(
-                            API_URL + "/course/" + courseId,
+                            databaseApi.getAssignmentsApi() + "/course/" + courseId,
                             String.class).getBody(),
                     Assignment.class);
         } catch (Exception e) {
@@ -102,7 +103,7 @@ public class AssignmentServiceImpl implements AssignmentService {
         try {
             assignments = JsonParser.parseIntoList(
                     restTemplate.getForEntity(
-                            API_URL + "/assignment/" + assignmentId,
+                            databaseApi.getAssignmentsApi() + "/assignment/" + assignmentId,
                             String.class).getBody(),
                     Assignment.class);
         } catch (Exception e) {

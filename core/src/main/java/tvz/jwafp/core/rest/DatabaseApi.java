@@ -7,8 +7,12 @@ import org.springframework.stereotype.Component;
 public class DatabaseApi {
     private final String baseApi;
 
-    public DatabaseApi(@Value("${api.base-url}") String baseApi) {
+    public DatabaseApi(@Value("${jwafp.api.base-url}") String baseApi) {
         this.baseApi = baseApi;
+    }
+
+    public String getAssignmentsApi() {
+        return baseApi + "assignments";
     }
 
     public String getCoursesApi() {
