@@ -29,7 +29,7 @@ import static tvz.jwafp.core.config.Urls.*;
 @RequestMapping(URL_STUDENT)
 @SessionAttributes("userLogin")
 public class StudentController {
-    private static final String NTPR_PROTOCOL_PREFIX = "jwafp://download?url=";
+    private static final String JWAFP_PROTOCOL_PREFIX = "jwafp://download?url=";
 
     private final StudentService studentService;
     private final GradeService gradeService;
@@ -91,7 +91,7 @@ public class StudentController {
 
                 reportService.saveReport(new ReportWrapper(report, data, signature));
                 String downloadUrl =
-                        NTPR_PROTOCOL_PREFIX + databaseApi.getReportsApi() + "/" + report.getStudent();
+                        JWAFP_PROTOCOL_PREFIX + databaseApi.getReportsApi() + "/" + report.getStudent();
                 redirectAttributes.addFlashAttribute("downloadUrl", downloadUrl);
                 redirectAttributes.addFlashAttribute("success", messages.getMessage("success.generation"));
             } else {
