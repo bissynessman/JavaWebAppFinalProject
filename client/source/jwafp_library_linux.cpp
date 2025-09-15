@@ -25,10 +25,10 @@ int gDownloadResult;
 
 std::string get_downloads_folder() {
 	const char* xdg = getenv("XDG_DOWNLOAD_DIR");
-    if (xdg && *xdg)
+	if (xdg && *xdg)
 		return std::string(xdg);
-    const char* home = getenv("HOME");
-    return std::string(home) + "/Downloads";
+	const char* home = getenv("HOME");
+	return std::string(home) + "/Downloads";
 }
 
 std::string format_bandwidth(double Bps) {
@@ -77,11 +77,11 @@ size_t header_callback(char* buffer, size_t size, size_t nitems, void* userdata)
 
 			std::string* filenameCopy = new std::string(gFilename);
 			g_idle_add([](void* data) -> gboolean {
-                std::string* fname = static_cast<std::string*>(data);
-                gtk_label_set_text(GTK_LABEL(gLabelFile), fname->c_str());
-                delete fname;
-                return G_SOURCE_REMOVE;
-            }, filenameCopy);
+				std::string* fname = static_cast<std::string*>(data);
+				gtk_label_set_text(GTK_LABEL(gLabelFile), fname->c_str());
+				delete fname;
+				return G_SOURCE_REMOVE;
+			}, filenameCopy);
 		}
 	}
 	return totalSize;
@@ -100,29 +100,29 @@ int progress_callback(void* clientp, curl_off_t dltotal, curl_off_t dlnow, curl_
 	};
 	
 	if (dltotal > 0) {
-        int percent = static_cast<int>((dlnow * 100) / dltotal);
-        auto now = std::chrono::steady_clock::now();
-        double sElapsed = std::chrono::duration<double>(now - gStartTime).count();
-        double speed = (sElapsed > 0) ? (double)dlnow / sElapsed : 0;
-        double sRemaining = (speed > 0) ? ((double)dltotal - dlnow) / speed : 0;
+		int percent = static_cast<int>((dlnow * 100) / dltotal);
+		auto now = std::chrono::steady_clock::now();
+		double sElapsed = std::chrono::duration<double>(now - gStartTime).count();
+		double speed = (sElapsed > 0) ? (double)dlnow / sElapsed : 0;
+		double sRemaining = (speed > 0) ? ((double)dltotal - dlnow) / speed : 0;
 
-        std::string stats = format_bandwidth(speed) + " - ETA: " + format_eta(sRemaining);
-        ProgressData* progress = new ProgressData{ percent, stats };
+		std::string stats = format_bandwidth(speed) + " - ETA: " + format_eta(sRemaining);
+		ProgressData* progress = new ProgressData{ percent, stats };
 
-        g_idle_add([](void* data) -> gboolean {
-            ProgressData* progress = static_cast<ProgressData*>(data);
-            char percentText[16];
-            snprintf(percentText, sizeof(percentText), "%d%%", progress->percent);
+		g_idle_add([](void* data) -> gboolean {
+			ProgressData* progress = static_cast<ProgressData*>(data);
+			char percentText[16];
+			snprintf(percentText, sizeof(percentText), "%d%%", progress->percent);
 
-            gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(gProgressBar), progress->percent / 100.0);
-            gtk_label_set_text(GTK_LABEL(gLabelPercent), percentText);
-            gtk_label_set_text(GTK_LABEL(gLabelStats), progress->stats.c_str());
+			gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(gProgressBar), progress->percent / 100.0);
+			gtk_label_set_text(GTK_LABEL(gLabelPercent), percentText);
+			gtk_label_set_text(GTK_LABEL(gLabelStats), progress->stats.c_str());
 
-            delete progress;
-            return G_SOURCE_REMOVE;
-        }, progress);
-    }
-    return 0;
+			delete progress;
+			return G_SOURCE_REMOVE;
+		}, progress);
+	}
+	return 0;
 }
 
 void download(std::string url) {
@@ -146,7 +146,7 @@ void download(std::string url) {
 	if (gBandwidthLimit > 0) curl_easy_setopt(curl, CURLOPT_MAX_RECV_SPEED_LARGE, (curl_off_t) gBandwidthLimit);
 
 	CURLcode res = curl_easy_perform(curl);
-	if(res != CURLE_OK) {
+	if(res == CURLE_OK) {
 		std::string final_path = downloads_path + "/" + gFilename;
 		std::rename(output_path.c_str(), final_path.c_str());
 		gDownloadResult = 0;
@@ -159,14 +159,18 @@ void download(std::string url) {
 }
 
 void showNotification(const char* message) {
-	g_idle_add([](void* data) -> gboolean {
-        GtkWidget* dialog = gtk_message_dialog_new(nullptr, GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-                                                  "%s", static_cast<char*>(data));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(GTK_WIDGET(dialog));
-        delete[] static_cast<char*>(data);
-        return G_SOURCE_REMOVE;
-    }, strdup(message));
+	GtkWidget* dialog = gtk_message_dialog_new(
+		nullptr,
+		GTK_DIALOG_MODAL,
+		GTK_MESSAGE_INFO,
+		GTK_BUTTONS_OK,
+		"%s",
+		message
+	);
+
+	gtk_widget_show_all(dialog);
+	gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
 }
 
 int verifySignature(const char* dataFilepath, const char* sigFilepath, const char* certFilepath) {
@@ -233,37 +237,43 @@ leave_pkey:
 }
 
 void make_download_window() {
-    GtkWidget* window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title(GTK_WINDOW(window), "Downloading...");
-    gtk_window_set_default_size(GTK_WINDOW(window), 320, 150);
-
+	GtkWidget* window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_title(GTK_WINDOW(window), "Downloading...");
+	gtk_window_set_default_size(GTK_WINDOW(window), 320, 150);
 	gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
 	gtk_window_set_type_hint(GTK_WINDOW(window), GDK_WINDOW_TYPE_HINT_DIALOG);
 
-    GtkWidget* vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
-    gtk_container_add(GTK_CONTAINER(window), vbox);
+	GtkWidget* outer_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+	gtk_container_add(GTK_CONTAINER(window), outer_vbox);
 
-    gLabelFile = gtk_label_new("File: unknown");
-    gtk_box_pack_start(GTK_BOX(vbox), gLabelFile, FALSE, FALSE, 0);
+	GtkWidget* top_spacer = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+	gtk_box_pack_start(GTK_BOX(outer_vbox), top_spacer, TRUE, TRUE, 0);
 
-    gProgressBar = gtk_progress_bar_new();
-    gtk_box_pack_start(GTK_BOX(vbox), gProgressBar, FALSE, FALSE, 0);
+	GtkWidget* vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+	gtk_container_add(GTK_CONTAINER(outer_vbox), vbox);
 
-    gLabelPercent = gtk_label_new("0%");
-    gtk_box_pack_start(GTK_BOX(vbox), gLabelPercent, FALSE, FALSE, 0);
+	gLabelFile = gtk_label_new("File: unknown");
+	gtk_box_pack_start(GTK_BOX(vbox), gLabelFile, FALSE, FALSE, 0);
 
-    gLabelStats = gtk_label_new("0 KB/s - ETA: 0m 0s");
-    gtk_box_pack_start(GTK_BOX(vbox), gLabelStats, FALSE, FALSE, 0);
+	gProgressBar = gtk_progress_bar_new();
+	gtk_box_pack_start(GTK_BOX(vbox), gProgressBar, FALSE, FALSE, 0);
 
-    gtk_widget_show_all(window);
+	gLabelPercent = gtk_label_new("0%");
+	gtk_box_pack_start(GTK_BOX(vbox), gLabelPercent, FALSE, FALSE, 0);
+
+	gLabelStats = gtk_label_new("0 KB/s - ETA: 0m 0s");
+	gtk_box_pack_start(GTK_BOX(vbox), gLabelStats, FALSE, FALSE, 0);
+
+	GtkWidget* bottom_spacer = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+	gtk_box_pack_start(GTK_BOX(outer_vbox), bottom_spacer, TRUE, TRUE, 0);
+
+	gtk_widget_show_all(window);
 }
 
 int downloadFile(const char* url, long bandwidthLimitBytesPerSec) {
 	gBandwidthLimit = bandwidthLimitBytesPerSec;
 	std::string urlStr(url);
 	size_t pos = urlStr.find_last_of('/');
-
-	gtk_init(0, nullptr);
 
 	make_download_window();
 
@@ -274,7 +284,14 @@ int downloadFile(const char* url, long bandwidthLimitBytesPerSec) {
 	return gDownloadResult;
 }
 
+void initializeGtk() {
+	int argc = 0;
+	char** argv = nullptr;
+	gtk_init(&argc, &argv);
+}
+
 extern "C" __attribute__((visibility("default"))) void show_notification(const char* msg) {
+	initializeGtk();
 	showNotification(msg);
 }
 
@@ -283,5 +300,6 @@ extern "C" __attribute__((visibility("default"))) int verify_signature(const cha
 }
 
 extern "C" __attribute__((visibility("default"))) int download_file(const char* url, long bandwidthLimit) {
+	initializeGtk();
 	return downloadFile(url, bandwidthLimit);
 }
