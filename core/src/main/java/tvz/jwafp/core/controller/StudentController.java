@@ -91,7 +91,7 @@ public class StudentController {
 
                 reportService.saveReport(new ReportWrapper(report, data, signature));
                 String downloadUrl =
-                        JWAFP_PROTOCOL_PREFIX + databaseApi.getReportsApi() + "/" + report.getStudent();
+                        JWAFP_PROTOCOL_PREFIX + databaseApi.getReportsPublicApi() + "/" + report.getStudent();
                 redirectAttributes.addFlashAttribute("downloadUrl", downloadUrl);
                 redirectAttributes.addFlashAttribute("success", messages.getMessage("success.generation"));
             } else {

@@ -6,9 +6,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class DatabaseApi {
     private final String baseApi;
+    private final String publicApi;
 
-    public DatabaseApi(@Value("${jwafp.api.base-url}") String baseApi) {
+    public DatabaseApi(@Value("${jwafp.api.base-url-internal}") String baseApi,
+                       @Value("${jwafp.api.base-url-public}") String publicApi) {
         this.baseApi = baseApi;
+        this.publicApi = publicApi;
     }
 
     public String getAssignmentsApi() {
@@ -29,6 +32,10 @@ public class DatabaseApi {
 
     public String getReportsApi() {
         return baseApi + "reports";
+    }
+
+    public String getReportsPublicApi() {
+        return publicApi + "reports";
     }
 
     public String getStudentsApi() {

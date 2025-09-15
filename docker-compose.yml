@@ -7,11 +7,13 @@ services:
       MYSQL_DATABASE: jwafpdb
       MYSQL_USER: user
       MYSQL_PASSWORD: password
-    ports:
-      - "3309:3306"
+    expose:
+      - "3308"
     volumes:
       - ./my.cnf:/etc/mysql/conf.d/my.cnf
       - /home/tim/docker-volumes/jwafp-mysql-data:/var/lib/mysql
+    networks:
+      - jwafpnet
 
   api:
     build: ./api
@@ -24,6 +26,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: password
     ports:
       - "8081:8081"
+    networks:
+      - jwafpnet
 
   core:
     build: ./core
@@ -31,6 +35,13 @@ services:
     depends_on:
       - api
     environment:
-      API_BASE_URL: http://api:8081/api/v1/
+      API_BASE_URL_INTERNAL: http://api:8081/api/v1/
+      API_BASE_URL_PUBLIC: http://192.168.0.121:8081/api/v1/
     ports:
       - "8080:8080"
+    networks:
+      - jwafpnet
+
+networks:
+  jwafpnet:
+    driver: bridge
