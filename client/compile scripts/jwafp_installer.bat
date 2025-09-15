@@ -1,1 +1,0 @@
-ISCC.exe /O"..\bin" "..\bin\jwafp_installer.iss"
