@@ -46,13 +46,6 @@
 				"-static",
 				"-lssl",
 				"-lcrypto",
-				"-lcrypt32",
-				"-lws2_32",
-				"-lgdi32",
-				"-luser32",
-				"-ladvapi32",
-				"-lole32",
-				"-luuid",
 				"-m64"
 			],
 			"options": {
