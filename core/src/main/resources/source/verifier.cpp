@@ -1,8 +1,9 @@
-#include <fstream>
-#include <vector>
 #include <openssl/x509.h>
 #include <openssl/pem.h>
 #include <openssl/err.h>
+
+#include <fstream>
+#include <vector>
 
 static std::vector<unsigned char> read_file(const char* path) {
 	std::ifstream file(path, std::ios::binary);
