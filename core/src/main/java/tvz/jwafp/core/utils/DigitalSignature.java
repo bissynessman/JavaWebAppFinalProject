@@ -15,7 +15,7 @@ public class DigitalSignature {
     private static final String KEY_ALIAS = "jwafpkey";
     private static final String HASH_ALGORITHM = "SHA256withRSA";
 
-    private static final String VERIFIER_PATH = "other/verifier.exe";
+    private static final String VERIFIER_PATH = "other/verifier";
     private static final String CERT_PATH = "other/cert.pem";
 
     public static File createDetachedSignature(File input) throws Exception {
@@ -49,9 +49,12 @@ public class DigitalSignature {
     }
 
     public static int verifySignature(File data, File sig) throws Exception {
-        ClassPathResource verifierResource = new ClassPathResource(VERIFIER_PATH);
+        String os = System.getProperty("os.name").toLowerCase();
+        boolean isLinux = os.contains("linux");
+
+        ClassPathResource verifierResource = new ClassPathResource(VERIFIER_PATH + (isLinux ? "" : ".exe"));
         ClassPathResource certResource = new ClassPathResource(CERT_PATH);
-        File verifier = Files.createTempFile("verifier-", ".exe").toFile();
+        File verifier = Files.createTempFile("verifier-", isLinux ? "" : ".exe").toFile();
         File cert = Files.createTempFile("certificate-", ".pem").toFile();
 
         verifier.deleteOnExit();
@@ -71,8 +74,7 @@ public class DigitalSignature {
                 verifier.getAbsolutePath(), data.getAbsolutePath(), sig.getAbsolutePath(), cert.getAbsolutePath());
         pb.redirectErrorStream(true);
         Process process = pb.start();
-        int exitCode = process.waitFor();
 
-        return exitCode;
+        return process.waitFor();
     }
 }
