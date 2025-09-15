@@ -85,6 +85,8 @@ Each module has its own `pom.xml` and can be run independently.
 - Tkinter
 - curl
 - OpenSSL
+- Gtk - 3.0
+- Docker
 
 ---
 
@@ -102,7 +104,6 @@ Each module has its own `pom.xml` and can be run independently.
 - Java 17+
 - Maven 3.6+
 - Python 3.0+
-- Windows 8+
 
 ---
 
@@ -128,15 +129,13 @@ Typical configuration points:
 
 ### Client-side `jwafp://` protocol handler
 
-- **Handler & install path:** `jwafp_handler.exe` is installed, by default, to `C:\Program Files (x86)\JWAFP\jwafp_handler.exe` alongside `cert.pem`.  
+- **Handler & install path:** Protocol handler/executable is installed, by default, to `C:\Program Files (x86)\JWAFP\jwafp_handler.exe`/`/usr/local/jwafp/jwafp_handler` (symlinked to `/usr/local/bin/jwafp`) alongside `cert.pem`.  
 - **Protocol format:**  
   `jwafp://download?url=<URL>` — `<URL>` must be percent-encoded.
-- **Registry / launch:** Installer must register the protocol so the command is exactly:  
-  `"<path>\protocol_handler.exe" "%1"`  
-  Wrong quoting or registering under the wrong hive will break launches.
-- **Native DLL** The EXE uses a native DLL requiring minimum version of Windows: Windows 8 (WINVER, _WIN32_WINNT = 0x0602).
+- **Windows Shared Library:** The executable uses an embedded shared library on Windows requiring minimum version: Windows 8 (WINVER, _WIN32_WINNT = 0x0602).
 - **Quick local test:**
-  `"C:\Program Files (x86)\JWAFP\jwafp_handler.exe" "jwafp://download?url=..."`
+  - `"C:\Program Files (x86)\JWAFP\jwafp_handler.exe" "jwafp://download?url=..."`
+  - `jwafp "jwafp://download?url=..."`
 
 ---
 
