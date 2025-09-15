@@ -3,8 +3,8 @@
 APP_NAME="jwafp"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 INSTALL_DIR="/usr/local/$APP_NAME"
-HANDLER_DESKTOP_FILE="/usr/local/share/applications/${APP_NAME}-handler.desktop"
-VERIFIER_DESKTOP_FILE="/usr/local/shar/applications/${APP_NAME}-verifier.desktop"
+HANDLER_DESKTOP_FILE="${HOME}/.local/share/applications/${APP_NAME}-handler.desktop"
+VERIFIER_DESKTOP_FILE="${HOME}/.local/share/applications/${APP_NAME}-verifier.desktop"
 
 sudo mkdir -p "$INSTALL_DIR"
 
@@ -22,16 +22,16 @@ Exec=$INSTALL_DIR/jwafp_handler %u
 Type=Application
 NoDisplay=true
 MimeType=x-scheme-handler/jwafp
-" | sudo tee "$HANDLER_DESKTOP_FILE" > /dev/null
+" | tee "$HANDLER_DESKTOP_FILE" > /dev/null
 
-sudo update-desktop-database
-xdg-mime default "$(basename $HANDLER_DESKTOP_FILE)" x-scheme-handler/jwafp
+xdg-mime default "$(basename "$HANDLER_DESKTOP_FILE")" x-scheme-handler/jwafp
+update-desktop-database "$HOME/.local/share/applications"
 
 echo "[Desktop Entry]
 Name=JWAFP Digital Signature Verifier
 Exec=$INSTALL_DIR/jwafp_handler
 Type=Application
-" | sudo tee "$VERIFIER_DESKTOP_FILE" > /dev/null
+" | tee "$VERIFIER_DESKTOP_FILE" > /dev/null
 
 echo "Installation complete!"
 echo "Use '$APP_NAME' command to run, URLs starting with jwafp:// will launch it."
