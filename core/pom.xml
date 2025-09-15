@@ -29,6 +29,8 @@
     <properties>
         <java.version>21</java.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+        <application.title>JWAFP-Core Web Service</application.title>
+        <application.version>${version}</application.version>
     </properties>
     <dependencies>
         <dependency>
