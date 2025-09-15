@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
 		{
-			"type": "cppbuild",
+			"type": "shell",
 			"label": "JWAFP Library Build - Windows",
 			"command": "C:/msys64/ucrt64/bin/g++.exe",
 			"args": [
@@ -80,7 +80,7 @@
 			"detail": "Build protocol handler installer via Inno Setup"
 		},
 		{
-			"type": "cppbuild",
+			"type": "shell",
 			"label": "JWAFP Library Build - Linux",
 			"command": "/usr/bin/g++",
 			"args": [
@@ -186,7 +186,7 @@
 			"detail": "Package protocol handler installer into TGZ archive"
 		},
 		{
-			"label": "Build - Windows",
+			"label": "Build for Windows",
 			"dependsOrder": "sequence",
 			"dependsOn": [
 				"JWAFP Library Build - Windows",
@@ -196,7 +196,7 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "Build - Linux",
+			"label": "Build for Linux",
 			"dependsOrder": "sequence",
 			"dependsOn":[
 				"JWAFP Library Build - Linux",
