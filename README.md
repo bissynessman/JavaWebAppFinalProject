@@ -83,9 +83,9 @@ Each module has its own `pom.xml` and can be run independently.
 - jUnit
 - Lombok
 - Tkinter
+- Gtk - 3.0
 - curl
 - OpenSSL
-- Gtk - 3.0
 - Docker
 
 ---
