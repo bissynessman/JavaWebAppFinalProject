@@ -1,7 +1,6 @@
 package tvz.jwafp.core.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +13,6 @@ import static tvz.jwafp.core.config.Urls.*;
 
 @Controller
 @RequestMapping(URL_ADMIN)
-@AllArgsConstructor
 @SessionAttributes("userLogin")
 public class AdminController {
     private static final String ACTION_AUTHORIZE_PROFESSORS = "authorizeProf";
@@ -23,8 +21,12 @@ public class AdminController {
 
     private final LocaleResolver localeResolver;
 
+    public AdminController(LocaleResolver localeResolver) {
+        this.localeResolver = localeResolver;
+    }
+
     @GetMapping
-    public String showAdminView(Model model, LocaleResolver localeResolver, HttpServletRequest request) {
+    public String showAdminView(Model model, HttpServletRequest request) {
         User userLogin = (User) model.getAttribute("userLogin");
         initModel(model, localeResolver, request);
         return "admin";
