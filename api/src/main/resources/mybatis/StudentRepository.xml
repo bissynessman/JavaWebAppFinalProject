@@ -1,7 +1,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="tvz.ntpr.api.repo.StudentRepository">
-    <resultMap id="base" type="tvz.ntpr.api.entity.Student">
+<mapper namespace="tvz.jwafp.api.repo.StudentRepository">
+    <resultMap id="base" type="tvz.jwafp.api.entity.Student">
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="first_name" jdbcType="VARCHAR" property="firstName"/>
         <result column="last_name" jdbcType="VARCHAR" property="lastName"/>
@@ -10,7 +10,7 @@
         <result column="full_name" jdbcType="VARCHAR" property="name"/>
     </resultMap>
 
-    <insert id="create" parameterType="tvz.ntpr.api.entity.Student" keyProperty="id">
+    <insert id="create" parameterType="tvz.jwafp.api.entity.Student" keyProperty="id">
         INSERT
           INTO `student` (
                    `id`,
@@ -28,7 +28,7 @@
                )
     </insert>
 
-    <update id="update" parameterType="tvz.ntpr.api.entity.Student" keyProperty="id">
+    <update id="update" parameterType="tvz.jwafp.api.entity.Student" keyProperty="id">
         UPDATE `student`
            SET `first_name` = #{firstName,jdbcType=VARCHAR},
                `last_name`  = #{lastName,jdbcType=VARCHAR},
@@ -57,7 +57,7 @@
         </where>
     </select>
 
-    <select id="findAll" resultType="tvz.ntpr.api.entity.Student">
+    <select id="findAll" resultType="tvz.jwafp.api.entity.Student">
         SELECT *
           FROM `student`
     </select>

@@ -1,0 +1,4 @@
+     CREATE EVENT `truncate_report`
+ON SCHEDULE EVERY 1 DAY
+     STARTS TIMESTAMP(CURRENT_DATE, '12:00:00')
+         DO TRUNCATE TABLE `report`;

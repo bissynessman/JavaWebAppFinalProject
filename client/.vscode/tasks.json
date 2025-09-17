@@ -2,19 +2,15 @@
     "version": "2.0.0",
     "tasks": [
 		{
-			"type": "cppbuild",
-			"label": "NTRP Library Build",
+			"type": "shell",
+			"label": "JWAFP Library Build - Windows",
 			"command": "C:/msys64/ucrt64/bin/g++.exe",
 			"args": [
 				"-fdiagnostics-color=always",
-				"-I",
-				"C:\\Program Files (x86)\\vcpkg\\installed\\x64-windows\\include",
-				"-L",
-				"C:\\Program Files (x86)\\vcpkg\\installed\\x64-windows\\lib",
-				"-g",
-				"${workspaceFolder}\\source\\ntpr_library.cpp",
-				"-o",
-				"${workspaceFolder}\\bin\\ntpr_handler embedded dlls\\ntpr_library.dll",
+				"-I", "C:\\Program Files (x86)\\vcpkg\\installed\\x64-windows\\include",
+				"-L", "C:\\Program Files (x86)\\vcpkg\\installed\\x64-windows\\lib",
+				"-g", "${workspaceFolder}\\source\\jwafp_library.cpp",
+				"-o", "${workspaceFolder}\\bin\\jwafp_handler embedded shared libraries\\jwafp_library.dll",
 				"-lcurl",
 				"-lole32",
 				"-lcomctl32",
@@ -38,27 +34,22 @@
 				"kind": "build",
 				"isDefault": false
 			},
-			"detail": "Build NTPR Library as a DLL"
+			"detail": "Build JWAFP Library as a DLL"
 		},
 		{
 			"type": "shell",
-			"label": "NTPR Handler Build",
+			"label": "JWAFP Handler Build - Windows",
 			"command": "pyinstaller.exe",
 			"args": [
 				"--onefile",
 				"--noconsole",
-				"--add-binary",
-				"${workspaceFolder}\\bin\\ntpr_handler embedded dlls\\ntpr_library.dll;.",
-				"--add-binary",
-				"${workspaceFolder}\\bin\\ntpr_handler embedded dlls\\libcurl.dll;.",
-				"--specpath",
-				"${workspaceFolder}\\build artifacts\\PyInstaller",
-				"--workpath",
-				"${workspaceFolder}\\build artifacts\\PyInstaller",
+				"--add-binary", "${workspaceFolder}\\bin\\jwafp_handler embedded shared libraries\\jwafp_library.dll;.",
+				"--add-binary", "${workspaceFolder}\\bin\\jwafp_handler embedded shared libraries\\libcurl.dll;.",
+				"--specpath", "${workspaceFolder}\\build artifacts\\PyInstaller",
+				"--workpath", "${workspaceFolder}\\build artifacts\\PyInstaller",
 				"--clean",
-				"--distpath",
-				"bin",
-				"${workspaceFolder}\\source\\ntpr_handler.py"
+				"--distpath", "bin",
+				"${workspaceFolder}\\source\\jwafp_handler.py"
 			],
 			"options": {
 				"cwd": "${workspaceFolder}"
@@ -68,15 +59,15 @@
 				"kind": "build",
 				"isDefault": false
 			},
-			"detail": "Build NTPR Handler as an EXE with embedded DLLs"
+			"detail": "Build JWAFP Handler as an EXE with embedded DLLs"
 		},
 		{
 			"type": "shell",
-			"label": "NTPR Installer Build",
+			"label": "JWAFP Installer Build - Windows",
 			"command": "ISCC.exe",
 			"args": [
 				"/O\"${workspaceFolder}\\bin\"",
-				"\"${workspaceFolder}\\source\\ntpr_installer.iss\""
+				"\"${workspaceFolder}\\source\\jwafp_installer.iss\""
 			],
 			"options": {
 				"cwd": "${workspaceFolder}"
@@ -89,12 +80,128 @@
 			"detail": "Build protocol handler installer via Inno Setup"
 		},
 		{
-			"label": "Build",
+			"type": "shell",
+			"label": "JWAFP Library Build - Linux",
+			"command": "/usr/bin/g++",
+			"args": [
+				"-fdiagnostics-color=always",
+				"-g", "${workspaceFolder}/source/jwafp_library_linux.cpp",
+				"-o", "${workspaceFolder}/bin/jwafp_handler embedded shared libraries/jwafp_library.so",
+				"-I", "/usr/include/gtk-3.0",
+				"-I", "/usr/include/pango-1.0",
+				"-I", "/usr/include/cairo",
+				"-I", "/usr/include/gdk-pixbuf-2.0",
+				"-I", "/usr/include/at-spi2-atk/2.0",
+				"-I", "/usr/include/at-spi-2.0",
+				"-I", "/usr/include/atk-1.0",
+				"-I", "/usr/include/dbus-1.0",
+				"-I", "/usr/lib64/dbus-1.0/include",
+				"-I", "/usr/include/elogind",
+				"-I", "/usr/include/fribidi",
+				"-I", "/usr/include/libpng16",
+				"-I", "/usr/include/pixman-1",
+				"-I", "/usr/include/harfbuzz",
+				"-I", "/usr/include/freetype2",
+				"-I", "/usr/include/gio-unix-2.0",
+				"-I", "/usr/lib64/libffi/include",
+				"-I", "/usr/include/glib-2.0",
+				"-I", "/usr/lib64/glib-2.0/include",
+				"-I", "/usr/include/libmount",
+				"-I", "/usr/include/blkid",
+				"-lgtk-3",
+				"-lgdk-3",
+				"-lpangocairo-1.0",
+				"-lcairo-gobject",
+				"-lgdk_pixbuf-2.0",
+				"-latk-1.0",
+				"-lpango-1.0",
+				"-lcairo",
+				"-lharfbuzz",
+				"-lgio-2.0",
+				"-lgobject-2.0",
+				"-lglib-2.0",
+				"-lcurl",
+				"-lssl",
+				"-lcrypto",
+				"-fPIC",
+				"-pthread",
+				"-shared"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"detail": "Build JWAFP Library as a shared object"
+		},
+		{
+			"type": "shell",
+			"label": "JWAFP Handler Build - Linux",
+			"command": "python3",
+			"args": [
+				"-m", "PyInstaller",
+				"--onefile",
+				"--name", "jwafp_handler",
+				"--noconsole",
+				"--add-binary", "${workspaceFolder}/bin/jwafp_handler embedded shared libraries/jwafp_library.so:.",
+				"--specpath", "${workspaceFolder}/build artifacts/PyInstaller",
+				"--workpath", "${workspaceFolder}/build artifacts/PyInstaller",
+				"--clean",
+				"--distpath", "${workspaceFolder}/bin/linux/bin",
+				"${workspaceFolder}/source/jwafp_handler_linux.py"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"detail": "Build JWAFP Handler as an executable with embedded shared objects"
+		},
+		{
+			"type": "shell",
+			"label": "JWAFP Installer Package - Linux",
+			"command": "tar",
+			"args": [
+				"-czv",
+				"-f", "${workspaceFolder}/bin/jwafp_handler.tar.gz",
+				"-C", "${workspaceFolder}/bin/linux",
+				"."
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"detail": "Package protocol handler installer into TGZ archive"
+		},
+		{
+			"label": "Build for Windows",
 			"dependsOrder": "sequence",
 			"dependsOn": [
-				"NTRP Library Build",
-				"NTPR Handler Build",
-				"NTPR Installer Build"
+				"JWAFP Library Build - Windows",
+				"JWAFP Handler Build - Windows",
+				"JWAFP Installer Build - Windows"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "Build for Linux",
+			"dependsOrder": "sequence",
+			"dependsOn":[
+				"JWAFP Library Build - Linux",
+				"JWAFP Handler Build - Linux",
+				"JWAFP Installer Package - Linux"
 			],
 			"problemMatcher": []
 		}

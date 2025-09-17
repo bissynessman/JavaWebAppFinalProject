@@ -8,9 +8,9 @@
         <version>3.4.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>tvz.ntpr</groupId>
+    <groupId>tvz.jwafp</groupId>
     <artifactId>core</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <name>core</name>
     <description>core</description>
     <url/>
@@ -29,6 +29,7 @@
     <properties>
         <java.version>21</java.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+        <application.title>JWAFP-Core Web Service</application.title>
     </properties>
     <dependencies>
         <dependency>
@@ -60,6 +61,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>

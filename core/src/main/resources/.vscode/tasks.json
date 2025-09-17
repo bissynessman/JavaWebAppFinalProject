@@ -1,0 +1,99 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+		{
+			"type": "shell",
+			"label": "JWAFP Digital Signature Verifier Minimal Build - Windows",
+			"command": "C:/msys64/ucrt64/bin/g++.exe",
+			"args": [
+				"-fdiagnostics-color=always",
+				"-DOPENSSL_STATIC",
+				"-g", "${workspaceFolder}\\verifier.cpp",
+				"-o", "${workspaceFolder}\\verifier.exe",
+				"-static",
+				"-lssl",
+				"-lcrypto",
+				"-lcrypt32",
+				"-lws2_32",
+				"-lgdi32",
+				"-luser32",
+				"-ladvapi32",
+				"-lole32",
+				"-luuid",
+				"-m64"
+			],
+			"options": {
+				"cwd": "C:/msys64/ucrt64/bin"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"detail": "Build JWAFP verifier as an EXE"
+		},
+		{
+			"type": "shell",
+			"label": "JWAFP Digital Signature Verifier Minimal Build - Linux",
+			"command": "/usr/bin/g++",
+			"args": [
+				"-fdiagnostics-color=always",
+				"-DOPENSSL_STATIC",
+				"-g", "${workspaceFolder}/source/verifier.cpp",
+				"-o", "${workspaceFolder}/other/verifier",
+				"-static",
+				"-lssl",
+				"-lcrypto",
+				"-m64"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"detail": "Build JWAFP verifier as an executable"
+		},
+		{
+			"type": "shell",
+			"label": "Mark as executable",
+			"command": "chmod",
+			"args": [
+				"+x",
+				"${workspaceFolder}/other/verifier"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"detail": "Mark JWAFP verifier as executable"
+		},
+		{
+			"label": "Build for Windows",
+			"dependsOrder": "sequence",
+			"dependsOn":[
+				"JWAFP Digital Signature Verifier Minimal Build - Windows"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "Build for Linux",
+			"dependsOrder": "sequence",
+			"dependsOn":[
+				"JWAFP Digital Signature Verifier Minimal Build - Linux",
+				"Mark as executable"
+			],
+			"problemMatcher": []
+		}
+	]
+}
