@@ -1,14 +1,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="tvz.ntpr.api.repo.GradeRepository">
-    <resultMap id="base" type="tvz.ntpr.api.entity.Grade">
+<mapper namespace="tvz.jwafp.api.repo.GradeRepository">
+    <resultMap id="base" type="tvz.jwafp.api.entity.Grade">
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="grade" jdbcType="INTEGER" property="grade"/>
         <result column="student" jdbcType="VARCHAR" property="student"/>
         <result column="course" jdbcType="VARCHAR" property="course"/>
     </resultMap>
 
-    <insert id="create" parameterType="tvz.ntpr.api.entity.Grade" keyProperty="id">
+    <insert id="create" parameterType="tvz.jwafp.api.entity.Grade" keyProperty="id">
         INSERT
           INTO `grade` (
                    `id`,
@@ -24,7 +24,7 @@
                )
     </insert>
 
-    <update id="update" parameterType="tvz.ntpr.api.entity.Grade" keyProperty="id">
+    <update id="update" parameterType="tvz.jwafp.api.entity.Grade" keyProperty="id">
         UPDATE `grade`
            SET `grade`   = #{grade,jdbcType=INTEGER},
                `student` = #{student,jdbcType=VARCHAR},
@@ -50,12 +50,12 @@
         </where>
     </select>
 
-    <select id="findAll" resultType="tvz.ntpr.api.entity.Grade">
+    <select id="findAll" resultType="tvz.jwafp.api.entity.Grade">
         SELECT *
           FROM `grade`
     </select>
 
-    <select id="findByStudentId" parameterType="String" resultType="tvz.ntpr.api.entity.Grade">
+    <select id="findByStudentId" parameterType="String" resultType="tvz.jwafp.api.entity.Grade">
         SELECT *
           FROM `grade`
         <where>
@@ -63,7 +63,7 @@
         </where>
     </select>
 
-    <select id="findByCourseId" parameterType="String" resultType="tvz.ntpr.api.entity.Grade">
+    <select id="findByCourseId" parameterType="String" resultType="tvz.jwafp.api.entity.Grade">
         SELECT *
           FROM `grade`
         <where>

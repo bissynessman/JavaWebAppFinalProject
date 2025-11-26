@@ -1,7 +1,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="tvz.ntpr.api.repo.AssignmentRepository">
-    <resultMap id="base" type="tvz.ntpr.api.entity.Assignment">
+<mapper namespace="tvz.jwafp.api.repo.AssignmentRepository">
+    <resultMap id="base" type="tvz.jwafp.api.entity.Assignment">
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="parent_assignment" jdbcType="VARCHAR" property="assignment"/>
         <result column="title" jdbcType="VARCHAR" property="title"/>
@@ -12,7 +12,7 @@
         <result column="student" jdbcType="VARCHAR" property="student"/>
     </resultMap>
 
-    <resultMap id="studentMask" type="tvz.ntpr.api.entity.Assignment">
+    <resultMap id="studentMask" type="tvz.jwafp.api.entity.Assignment">
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="parent_assignment" jdbcType="VARCHAR" property="assignment"/>
         <result column="title" jdbcType="VARCHAR" property="title"/>
@@ -24,7 +24,7 @@
         <result column="student_name" jdbcType="VARCHAR" property="studentName"/>
     </resultMap>
 
-    <insert id="create" parameterType="tvz.ntpr.api.entity.Assignment" keyProperty="id">
+    <insert id="create" parameterType="tvz.jwafp.api.entity.Assignment" keyProperty="id">
         INSERT
           INTO `assignment` (
                     `id`,
@@ -48,7 +48,7 @@
                )
     </insert>
 
-    <update id="update" parameterType="tvz.ntpr.api.entity.Assignment" keyProperty="id">
+    <update id="update" parameterType="tvz.jwafp.api.entity.Assignment" keyProperty="id">
         UPDATE `assignment`
            SET `parent_assignment` = #{assignment,jdbcType=VARCHAR},
                `title`      = #{title,jdbcType=VARCHAR},

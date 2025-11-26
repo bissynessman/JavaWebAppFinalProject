@@ -1,7 +1,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="tvz.ntpr.api.repo.ReportRepository">
-    <resultMap id="base" type="tvz.ntpr.api.entity.Report">
+<mapper namespace="tvz.jwafp.api.repo.ReportRepository">
+    <resultMap id="base" type="tvz.jwafp.api.entity.Report">
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="data" jdbcType="BLOB" property="data"/>
         <result column="signature" jdbcType="BLOB" property="signature"/>
@@ -9,7 +9,7 @@
         <result column="student" jdbcType="VARCHAR" property="student"/>
     </resultMap>
 
-    <insert id="create" parameterType="tvz.ntpr.api.entity.Report" keyProperty="id">
+    <insert id="create" parameterType="tvz.jwafp.api.entity.Report" keyProperty="id">
         INSERT
           INTO `report` (
                    `id`,
@@ -27,7 +27,7 @@
                )
     </insert>
 
-    <update id="update" parameterType="tvz.ntpr.api.entity.Report" keyProperty="id">
+    <update id="update" parameterType="tvz.jwafp.api.entity.Report" keyProperty="id">
         UPDATE `report`
            SET `data`       = #{data,jdbcType=BLOB},
                `signature`  = #{signature,jdbcType=BLOB},
@@ -54,7 +54,7 @@
         </where>
     </select>
 
-    <select id="findAll" resultType="tvz.ntpr.api.entity.Report">
+    <select id="findAll" resultType="tvz.jwafp.api.entity.Report">
         SELECT *
           FROM `report`
     </select>

@@ -25,7 +25,7 @@
                                             th:text="#{select-major}"></option>
                                     <option th:value="${null}"
                                             th:text="#{all}"></option>
-                                    <option th:each="major : ${T(tvz.ntpr.core.enums.Major).values()}"
+                                    <option th:each="major : ${T(tvz.jwafp.core.enums.Major).values()}"
                                             th:value="${major}" th:text="#{${major.messagesKey}}"></option>
                                 </select>
                                 <button type="submit" class="btn btnB"
