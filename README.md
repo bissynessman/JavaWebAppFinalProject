@@ -37,7 +37,7 @@ JavaWebAppNTPR/
 ```
 
 Each module has its own `pom.xml` and can be run independently.
-`client` is not a module but a directory containing the client-side app for remote-prompted local execution.
+`client` is not a module but a directory containing the client-side app for remotely prompted local execution.
 
 ---
 
